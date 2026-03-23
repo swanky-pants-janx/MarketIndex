@@ -4,6 +4,9 @@ var _sb = window.supabase.createClient(
   'sb_publishable_f64M7MFa88zOMuZ083v-lw_Ypgcyhx-'
 );
 
+// ── EMAIL ─────────────────────────────────────────────────────────
+function sendEmail(to,subject,html){_sb.functions.invoke('resend-email',{body:{to,subject,html}}).then(({error})=>{if(error)console.error('Email error:',error);});}
+
 // ── HELPERS ──────────────────────────────────────────────────────
 var darkMode=false;
 function toggleDark(){darkMode=!darkMode;document.body.classList.toggle('dark',darkMode);syncSettingsMenu();}
@@ -90,7 +93,7 @@ function approveSelected(){var checked=[...new Set(Array.from(document.querySele
 function closeApprovalModal(){state._approveQueue=[];closeModal('approve-modal');}
 function openNextApproval(){if(!state._approveQueue.length){updateMetrics();renderPending();return;}var id=state._approveQueue[0];var v=state.vendors.find(x=>x.id===id);if(!v){state._approveQueue.shift();openNextApproval();return;}document.getElementById('approve-modal-name').textContent=v.name;document.getElementById('approve-modal-count').textContent=state._approveQueue.length>1?state._approveQueue.length+' vendors in queue':'';document.getElementById('approve-market-checks').innerHTML=v.markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);if(!m)return'';return'<label style="display:flex;align-items:center;gap:10px;padding:12px;border:0.5px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:8px;background:var(--bg3)"><input type="checkbox" class="approve-mkt-cb" value="'+mid+'" checked style="width:18px;height:18px;accent-color:var(--blue)"><div><div style="font-size:14px;font-weight:500;color:var(--text)">'+esc(m.name)+'</div><div style="font-size:12px;color:var(--text2)">'+m.dates.join(' · ')+' · R'+(m.fee||FEE)+'/date</div></div></label>';}).join('');document.getElementById('approve-modal').classList.add('open');}
 
-function mergeApproveVendor(v,sel){var existing=state.vendors.find(x=>x.id!==v.id&&x.status==='approved'&&x.email===v.email);if(existing){sel.forEach(mid=>{if(!existing.markets.includes(mid))existing.markets.push(mid);if(!existing.marketPayments)existing.marketPayments={};if(!existing.marketPayments[mid])existing.marketPayments[mid]='outstanding';});sbSave('vendors',vendorToDb(existing));sbDel('vendors',v.id);state.vendors=state.vendors.filter(x=>x.id!==v.id);}else{v.status='approved';v.markets=sel.slice();v.payStatus='outstanding';v.payMethod=null;v.marketPayments={};sel.forEach(mid=>{v.marketPayments[mid]='outstanding';});v.approvedAt=new Date().toLocaleDateString('en-ZA');sbSave('vendors',vendorToDb(v));}}
+function mergeApproveVendor(v,sel){var mnames=sel.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?m.name:mid;}).join(', ');var existing=state.vendors.find(x=>x.id!==v.id&&x.status==='approved'&&x.email===v.email);if(existing){sel.forEach(mid=>{if(!existing.markets.includes(mid))existing.markets.push(mid);if(!existing.marketPayments)existing.marketPayments={};if(!existing.marketPayments[mid])existing.marketPayments[mid]='outstanding';});sbSave('vendors',vendorToDb(existing));sbDel('vendors',v.id);state.vendors=state.vendors.filter(x=>x.id!==v.id);}else{v.status='approved';v.markets=sel.slice();v.payStatus='outstanding';v.payMethod=null;v.marketPayments={};sel.forEach(mid=>{v.marketPayments[mid]='outstanding';});v.approvedAt=new Date().toLocaleDateString('en-ZA');sbSave('vendors',vendorToDb(v));}sendEmail(v.email,'You\'ve been approved — '+esc(currentUser.market),'<p>Hi '+esc(v.name)+',</p><p>Great news! Your vendor application has been approved for the following market'+(sel.length!==1?'s':'')+':</p><p><strong>'+esc(mnames)+'</strong></p><p>The coordinator will be in touch with further details. Please ensure your stall fee is paid before the market date.</p><p>Thanks,<br>'+esc(currentUser.market)+'</p>');}
 
 function confirmApproval(){
   var id=state._approveQueue.shift();
@@ -352,9 +355,11 @@ function submitVendorForm(){
   if(!name||!desc||!email){alert('Please fill in all required fields.');return;}
   if(!markets.length){alert('Please select at least one market.');return;}
   if(!email.includes('@')){alert('Please enter a valid email address.');return;}
+  var mnames=markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?m.name:mid;}).join(', ');
   var nv={id:uid(),name,desc,email,markets:markets.slice(),images:[..._vendorImages],status:'pending',payStatus:'outstanding',payMethod:null,marketPayments:{},submitted:new Date().toLocaleDateString('en-ZA'),feePerMarket:FEE};
   state.vendors.push(nv);
   sbSave('vendors',vendorToDb(nv));
+  if(currentUser){sendEmail(currentUser.email,'New vendor application — '+name,'<p>A new vendor application has been submitted.</p><p><strong>Stall name:</strong> '+esc(name)+'<br><strong>Email:</strong> '+esc(email)+'<br><strong>Markets:</strong> '+esc(mnames)+'<br><strong>Description:</strong> '+esc(desc)+'</p><p>Log in to your dashboard to review and approve.</p>');}
   document.getElementById('v-name').value='';document.getElementById('v-desc').value='';document.getElementById('v-email').value='';
   _vendorImages=[];renderVendorThumbs();
   document.querySelectorAll('.v-mkt-check').forEach(c=>{c.checked=false;c.closest('.market-select-card').classList.remove('selected');});
