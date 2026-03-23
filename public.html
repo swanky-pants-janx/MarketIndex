@@ -82,7 +82,8 @@
 <script>
 var _sb = window.supabase.createClient(
   'https://bjzckhanxudkyrpczqbs.supabase.co',
-  'sb_publishable_f64M7MFa88zOMuZ083v-lw_Ypgcyhx-'
+  'sb_publishable_f64M7MFa88zOMuZ083v-lw_Ypgcyhx-',
+  {auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}}
 );
 
 var coordinator = null;
