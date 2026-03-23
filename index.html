@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>MarketDesk</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,sans-serif;background:var(--color-background-tertiary,#f5f5f3);color:var(--color-text-primary,#1a1a1a);min-height:100vh}
-:root{--bg:#fff;--bg2:#f5f5f3;--bg3:#efefec;--border:rgba(0,0,0,0.12);--text:#1a1a1a;--text2:#666;--text3:#999;--blue:#185fa5;--blue-bg:#e6f1fb;--green:#3b6d11;--green-bg:#eaf3de;--amber:#854f0b;--amber-bg:#faeeda;--red:#a32d2d;--red-bg:#fcebeb;--teal:#0f6e56;--teal-bg:#e1f5ee}
+:root{--bg:#fff;--bg2:#f5f5f3;--bg3:#efefec;--border:rgba(0,0,0,0.12);--text:#1a1a1a;--text2:#666;--text3:#999;--blue:#185fa5;--blue-bg:#e6f1fb;--green:#3b6d11;--green-bg:#eaf3de;--amber:#854f0b;--amber-bg:#faeeda;--red:#a32d2d;--red-bg:#fcebeb;--teal:#0f6e56;--teal-bg:#e1f5ee;--nav-h:52px;--bottom-h:60px}
 
-/* AUTH */
+/* ── AUTH ── */
 .auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem}
 .auth-card{background:var(--bg);border:0.5px solid var(--border);border-radius:16px;padding:2rem;width:100%;max-width:400px}
 .auth-logo{font-size:20px;font-weight:500;color:var(--blue);margin-bottom:0.25rem}
@@ -20,9 +20,9 @@ body{font-family:system-ui,sans-serif;background:var(--color-background-tertiary
 .auth-error{background:var(--red-bg);color:var(--red);font-size:12px;padding:8px 12px;border-radius:8px;margin-bottom:1rem;display:none}
 .auth-success{background:var(--green-bg);color:var(--green);font-size:12px;padding:8px 12px;border-radius:8px;margin-bottom:1rem;display:none}
 
-/* NAV */
-.nav{background:var(--bg);border-bottom:0.5px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;height:52px;position:sticky;top:0;z-index:100}
-.nav-brand{font-size:14px;font-weight:500;margin-right:2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+/* ── NAV (desktop) ── */
+.nav{background:var(--bg);border-bottom:0.5px solid var(--border);display:flex;align-items:center;padding:0 1.5rem;height:var(--nav-h);position:sticky;top:0;z-index:100}
+.nav-brand{font-size:14px;font-weight:500;margin-right:1.5rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
 .nav-brand span{color:var(--blue)}
 .nav-tabs{display:flex;height:100%;flex:1}
 .nav-tab{padding:0 1rem;height:100%;display:flex;align-items:center;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2);white-space:nowrap}
@@ -34,33 +34,83 @@ body{font-family:system-ui,sans-serif;background:var(--color-background-tertiary
 .nav-logout{font-size:12px;color:var(--red);cursor:pointer;padding:4px 10px;border:0.5px solid rgba(163,45,45,0.25);border-radius:6px;background:none}
 .nav-logout:hover{background:var(--red-bg)}
 
-/* PAGES */
-.page{display:none;padding:1.5rem;max-width:1100px;margin:0 auto}
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-h);background:var(--bg);border-top:0.5px solid var(--border);z-index:100;align-items:stretch}
+.bottom-nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--text3);font-size:10px;padding:6px 4px;border:none;background:none;-webkit-tap-highlight-color:transparent}
+.bottom-nav-item.active{color:var(--blue)}
+.bottom-nav-item svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── PAGES ── */
+.page{display:none;padding:1.25rem;max-width:1100px;margin:0 auto;padding-bottom:calc(1.25rem + var(--bottom-h))}
 .page.active{display:block}
 h2{font-size:18px;font-weight:500;margin-bottom:1rem}
 h3{font-size:15px;font-weight:500;margin-bottom:0.75rem}
 .card{background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:1.25rem}
-.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.5rem}
-.metric{background:var(--bg3);border-radius:8px;padding:1rem}
-.metric-label{font-size:12px;color:var(--text2);margin-bottom:4px}
-.metric-value{font-size:24px;font-weight:500}
+
+/* ── PAGE BANNERS ── */
+.page-banner{border-radius:10px;padding:12px 16px;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:10px}
+.page-banner.blue{background:var(--blue-bg);border:0.5px solid rgba(24,95,165,0.15)}
+.page-banner.blue .page-banner-title{color:var(--blue)}
+.page-banner.blue .page-banner-desc{color:#2a5a96}
+.page-banner.green{background:var(--green-bg);border:0.5px solid rgba(59,109,17,0.15)}
+.page-banner.green .page-banner-title{color:var(--green)}
+.page-banner.green .page-banner-desc{color:#2d5a0e}
+.page-banner.amber{background:var(--amber-bg);border:0.5px solid rgba(133,79,11,0.15)}
+.page-banner.amber .page-banner-title{color:var(--amber)}
+.page-banner.amber .page-banner-desc{color:#6b3f08}
+.page-banner.teal{background:var(--teal-bg);border:0.5px solid rgba(15,110,86,0.15)}
+.page-banner.teal .page-banner-title{color:var(--teal)}
+.page-banner.teal .page-banner-desc{color:#0a5240}
+.page-banner-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.page-banner-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.page-banner-desc{font-size:12px;line-height:1.5}
+
+/* ── METRICS ── */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.25rem}
+.metric{background:var(--bg3);border-radius:8px;padding:0.875rem}
+.metric-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.metric-value{font-size:22px;font-weight:500}
 .metric-value.blue{color:var(--blue)}.metric-value.green{color:var(--green)}.metric-value.amber{color:var(--amber)}.metric-value.red{color:var(--red)}
-.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
-.btn{padding:7px 14px;border:0.5px solid var(--border);border-radius:8px;background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);transition:background 0.1s}
+
+/* ── BUTTONS ── */
+.btn{padding:8px 14px;border:0.5px solid var(--border);border-radius:8px;background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);transition:background 0.1s;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .btn:hover{background:var(--bg3)}
-.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.primary:hover{opacity:0.9}
+.btn:active{opacity:0.8}
+.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
 .btn.success{background:var(--green-bg);color:var(--green);border-color:rgba(59,109,17,0.2)}
 .btn.danger{background:var(--red-bg);color:var(--red);border-color:rgba(163,45,45,0.2)}
-.btn.small{padding:4px 10px;font-size:12px}
+.btn.small{padding:6px 10px;font-size:12px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.search-input{padding:8px 12px;border:0.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text);flex:1;min-width:140px}
+.search-input:focus{outline:none;border-color:var(--blue)}
+
+/* ── VENDOR CARDS (mobile replaces table) ── */
+.vendor-card{background:var(--bg);border:0.5px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:0.625rem}
+.vendor-card-header{display:flex;align-items:center;gap:10px}
+.vendor-card-check{flex-shrink:0}
+.vendor-card-name{font-weight:500;font-size:14px;flex:1;cursor:pointer;color:var(--blue)}
+.vendor-card-badge{flex-shrink:0}
+.vendor-card-meta{font-size:12px;color:var(--text2);margin-top:4px;padding-left:26px}
+.vendor-card-expand{padding-left:26px;margin-top:10px;padding-top:10px;border-top:0.5px solid var(--border)}
+.vendor-card-expand .field-label{font-size:11px;color:var(--text2);margin-bottom:2px;margin-top:8px}
+.vendor-card-expand .field-label:first-child{margin-top:0}
+.vendor-card-expand .field-value{font-size:13px}
+
+/* ── TABLE (tablet/desktop only) ── */
 .vendor-table{width:100%;border-collapse:collapse;font-size:13px}
 .vendor-table th{text-align:left;padding:8px 12px;border-bottom:0.5px solid var(--border);color:var(--text2);font-weight:500;font-size:12px}
 .vendor-table td{padding:10px 12px;border-bottom:0.5px solid var(--border);vertical-align:middle}
 .vendor-table tr:last-child td{border-bottom:none}
 .vendor-table tbody tr:hover td{background:var(--bg3)}
 .expand-row td{background:var(--bg2);padding:0}
-.expand-inner{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.expand-inner{padding:14px 16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .field-label{font-size:11px;color:var(--text2);margin-bottom:3px}
 .field-value{font-size:13px}
+
+/* ── BADGES & CHIPS ── */
 .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:500}
 .badge.pending{background:var(--amber-bg);color:var(--amber)}
 .badge.paid{background:var(--green-bg);color:var(--green)}
@@ -68,79 +118,103 @@ h3{font-size:15px;font-weight:500;margin-bottom:0.75rem}
 .badge.manual{background:var(--blue-bg);color:var(--blue)}
 .badge.payfast{background:var(--blue-bg);color:var(--blue)}
 .badge.yoco{background:var(--teal-bg);color:var(--teal)}
-input[type=checkbox]{width:16px;height:16px;cursor:pointer;accent-color:var(--blue)}
-.chip{padding:4px 10px;border-radius:20px;font-size:12px;background:var(--teal-bg);color:var(--teal);border:0.5px solid rgba(15,110,86,0.2)}
-.market-chips{display:flex;flex-wrap:wrap;gap:6px}
+input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:var(--blue)}
+.chip{padding:3px 9px;border-radius:20px;font-size:11px;background:var(--teal-bg);color:var(--teal);border:0.5px solid rgba(15,110,86,0.2)}
+.market-chips{display:flex;flex-wrap:wrap;gap:5px}
 .vendor-name-btn{background:none;border:none;cursor:pointer;font-size:13px;color:var(--blue);text-align:left;text-decoration:underline;text-decoration-style:dotted;padding:0}
-.search-input{padding:7px 12px;border:0.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text);flex:1;min-width:180px}
-.search-input:focus{outline:none;border-color:var(--blue)}
+
+/* ── FORMS ── */
 .form-group{margin-bottom:1rem}
 .form-label{font-size:13px;font-weight:500;margin-bottom:6px;display:block}
-.form-input{width:100%;padding:8px 12px;border:0.5px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text)}
+.form-input{width:100%;padding:10px 12px;border:0.5px solid var(--border);border-radius:8px;font-size:16px;background:var(--bg);color:var(--text)}
 .form-input:focus{outline:none;border-color:var(--blue)}
-textarea.form-input{min-height:80px;resize:vertical}
+textarea.form-input{min-height:80px;resize:vertical;font-size:15px}
+select.form-input{font-size:14px}
+
+/* ── MARKET CARDS ── */
 .market-card{background:var(--bg);border:0.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem}
-.market-banner{height:120px;background:linear-gradient(135deg,var(--blue-bg),var(--teal-bg));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--blue);position:relative;overflow:hidden}
+.market-banner{height:110px;background:linear-gradient(135deg,var(--blue-bg),var(--teal-bg));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;color:var(--blue);position:relative;overflow:hidden}
 .market-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .market-banner-label{position:relative;z-index:1;background:rgba(0,0,0,0.32);color:#fff;padding:4px 12px;border-radius:20px;font-size:13px}
-.market-banner-fee{position:absolute;bottom:8px;right:12px;font-size:11px;z-index:1;background:rgba(0,0,0,0.28);color:#fff;padding:2px 8px;border-radius:10px}
+.market-banner-fee{position:absolute;bottom:8px;right:10px;font-size:11px;z-index:1;background:rgba(0,0,0,0.28);color:#fff;padding:2px 8px;border-radius:10px}
 .market-body{padding:1rem}
-.market-footer{padding:0.75rem 1rem;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.date-chip{padding:3px 10px;border-radius:20px;font-size:11px;background:var(--blue-bg);color:var(--blue);border:0.5px solid rgba(24,95,165,0.2)}
+.market-footer{padding:0.75rem 1rem;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.date-chip{padding:3px 9px;border-radius:20px;font-size:11px;background:var(--blue-bg);color:var(--blue);border:0.5px solid rgba(24,95,165,0.2)}
 .date-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .published-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-size:11px}
 .published-badge.on{background:var(--green-bg);color:var(--green)}
 .published-badge.off{background:var(--bg3);color:var(--text2)}
 .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
 .dot.green{background:var(--green)}.dot.gray{background:var(--text3)}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;align-items:center;justify-content:center}
+
+/* ── MODALS ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:flex-end;justify-content:center}
 .modal-overlay.open{display:flex}
-.modal{background:var(--bg);border-radius:16px;padding:1.5rem;width:90%;max-width:540px;max-height:85vh;overflow-y:auto}
+.modal{background:var(--bg);border-radius:16px 16px 0 0;padding:1.5rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 1.25rem}
 .modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.25rem}
-.modal-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--text2);padding:0 4px;line-height:1}
-.public-page{max-width:720px;margin:0 auto;padding:1.5rem}
-.public-banner{border-radius:12px;height:160px;background:linear-gradient(135deg,#e6f1fb,#e1f5ee);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;overflow:hidden;position:relative}
+.modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--text2);padding:0 4px;line-height:1}
+
+/* ── PUBLIC PAGE ── */
+.public-page{max-width:720px;margin:0 auto;padding:1.25rem;padding-bottom:calc(1.25rem + var(--bottom-h))}
+.public-banner{border-radius:12px;height:140px;background:linear-gradient(135deg,#e6f1fb,#e1f5ee);display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;overflow:hidden;position:relative}
 .public-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .public-banner-text{position:relative;z-index:1;text-align:center}
 .tabs-inner{display:flex;border-bottom:0.5px solid var(--border);margin-bottom:1.25rem}
-.tab-inner{padding:8px 16px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2)}
+.tab-inner{padding:10px 16px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;color:var(--text2)}
 .tab-inner.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:500}
-.market-select-card{background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:1rem 1.25rem;margin-bottom:0.75rem;display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.market-select-card{background:var(--bg);border:0.5px solid var(--border);border-radius:12px;padding:1rem;margin-bottom:0.75rem;display:flex;align-items:flex-start;gap:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .market-select-card.selected{border-color:var(--blue);background:var(--blue-bg)}
-.empty-state{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
-.toggle-switch{position:relative;width:36px;height:20px;cursor:pointer;display:inline-block}
-.toggle-switch input{opacity:0;width:0;height:0}
-.toggle-slider{position:absolute;inset:0;background:var(--bg3);border:0.5px solid var(--border);border-radius:20px;transition:0.2s}
-.toggle-slider:before{content:'';position:absolute;width:14px;height:14px;left:2px;top:2px;background:var(--text3);border-radius:50%;transition:0.2s}
-.toggle-switch input:checked+.toggle-slider{background:var(--green-bg);border-color:rgba(59,109,17,0.3)}
-.toggle-switch input:checked+.toggle-slider:before{transform:translateX(16px);background:var(--green)}
-.page-banner{background:var(--blue-bg);border:0.5px solid rgba(24,95,165,0.15);border-radius:10px;padding:12px 16px;margin-bottom:1.25rem;display:flex;align-items:flex-start;gap:10px}
-.page-banner-icon{font-size:16px;flex-shrink:0;margin-top:1px}
-.page-banner-title{font-size:13px;font-weight:500;color:var(--blue);margin-bottom:2px}
-.page-banner-desc{font-size:12px;color:#2a5a96;line-height:1.5}
-.page-banner.green{background:var(--green-bg);border-color:rgba(59,109,17,0.15)}
-.page-banner.green .page-banner-title{color:var(--green)}
-.page-banner.green .page-banner-desc{color:#2d5a0e}
-.page-banner.amber{background:var(--amber-bg);border-color:rgba(133,79,11,0.15)}
-.page-banner.amber .page-banner-title{color:var(--amber)}
-.page-banner.amber .page-banner-desc{color:#6b3f08}
-.page-banner.teal{background:var(--teal-bg);border-color:rgba(15,110,86,0.15)}
-.page-banner.teal .page-banner-title{color:var(--teal)}
-.page-banner.teal .page-banner-desc{color:#0a5240}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--text2);font-size:14px}
+
+/* ── UPLOAD ── */
 .upload-box{border:1.5px dashed var(--border);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;font-size:13px;color:var(--text2);position:relative;transition:border-color 0.15s}
 .upload-box:hover{border-color:var(--blue);color:var(--blue)}
 .upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 .upload-preview{width:100%;height:100px;object-fit:cover;border-radius:8px;margin-top:8px;display:block}
 .img-thumb-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.img-thumb{position:relative;width:80px;height:80px}
+.img-thumb{position:relative;width:76px;height:76px}
 .img-thumb img{width:100%;height:100%;object-fit:cover;border-radius:8px;border:0.5px solid var(--border)}
-.img-thumb-remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--red);color:#fff;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1}
-@media(max-width:600px){.metric-grid{grid-template-columns:1fr 1fr}.expand-inner{grid-column:1fr}}
+.img-thumb-remove{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--red);color:#fff;border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+
+/* ── RESPONSIVE ── */
+@media(max-width:767px){
+  .nav-tabs,.nav-right,.nav-user{display:none}
+  .nav{padding:0 1rem}
+  .nav-brand{max-width:calc(100vw - 120px);font-size:13px}
+  .nav-logout-mobile{display:flex;align-items:center;margin-left:auto}
+  .bottom-nav{display:flex}
+  .metric-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .metric-value{font-size:20px}
+  .page{padding:1rem;padding-bottom:calc(1rem + var(--bottom-h))}
+  .desktop-table{display:none}
+  .mobile-cards{display:block}
+  .page-actions{flex-direction:column;gap:8px}
+  .page-actions .btn-row{width:100%}
+  .page-actions .btn-row .btn{flex:1}
+  .card{padding:1rem}
+  .market-footer .btn-row{width:100%}
+  .market-footer .btn-row .btn{flex:1}
+}
+@media(min-width:768px){
+  .nav-logout-mobile{display:none}
+  .desktop-table{display:table}
+  .mobile-cards{display:none}
+  .page-actions{flex-wrap:nowrap}
+  .expand-inner{grid-template-columns:1fr 1fr}
+}
+@media(min-width:768px) and (max-width:1023px){
+  .metric-grid{grid-template-columns:repeat(2,1fr)}
+  .nav-brand{max-width:160px}
+}
+@media(min-width:1024px){
+  .metric-grid{grid-template-columns:repeat(4,1fr)}
+}
 </style>
 </head>
 <body>
 
-<!-- AUTH SCREEN -->
+<!-- AUTH -->
 <div id="auth-screen" class="auth-wrap">
   <div class="auth-card">
     <div class="auth-logo">MarketDesk</div>
@@ -151,51 +225,28 @@ textarea.form-input{min-height:80px;resize:vertical}
     </div>
     <div id="auth-error" class="auth-error"></div>
     <div id="auth-success" class="auth-success"></div>
-
-    <!-- LOGIN FORM -->
     <div id="auth-login">
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input class="form-input" id="login-email" type="email" placeholder="you@example.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input class="form-input" id="login-password" type="password" placeholder="••••••••">
-      </div>
+      <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="login-email" type="email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="login-password" type="password" placeholder="••••••••"></div>
       <button class="btn primary" style="width:100%;margin-top:0.25rem" onclick="doLogin()">Log in</button>
-      <p style="font-size:12px;color:var(--text2);text-align:center;margin-top:1rem">Don't have an account? <span style="color:var(--blue);cursor:pointer" onclick="switchAuthTab('register')">Create one</span></p>
+      <p style="font-size:12px;color:var(--text2);text-align:center;margin-top:1rem">No account? <span style="color:var(--blue);cursor:pointer" onclick="switchAuthTab('register')">Create one</span></p>
     </div>
-
-    <!-- REGISTER FORM -->
     <div id="auth-register" style="display:none">
-      <div class="form-group">
-        <label class="form-label">Market name *</label>
-        <input class="form-input" id="reg-market" type="text" placeholder="e.g. Picnic & Thrift">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Your name *</label>
-        <input class="form-input" id="reg-name" type="text" placeholder="e.g. Sarah">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Email *</label>
-        <input class="form-input" id="reg-email" type="email" placeholder="you@example.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password *</label>
-        <input class="form-input" id="reg-password" type="password" placeholder="At least 6 characters">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Confirm password *</label>
-        <input class="form-input" id="reg-confirm" type="password" placeholder="Repeat password">
-      </div>
+      <div class="form-group"><label class="form-label">Market name *</label><input class="form-input" id="reg-market" type="text" placeholder="e.g. Picnic & Thrift"></div>
+      <div class="form-group"><label class="form-label">Your name *</label><input class="form-input" id="reg-name" type="text" placeholder="e.g. Sarah"></div>
+      <div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="reg-email" type="email" placeholder="you@example.com"></div>
+      <div class="form-group"><label class="form-label">Password *</label><input class="form-input" id="reg-password" type="password" placeholder="At least 6 characters"></div>
+      <div class="form-group"><label class="form-label">Confirm password *</label><input class="form-input" id="reg-confirm" type="password" placeholder="Repeat password"></div>
       <button class="btn primary" style="width:100%;margin-top:0.25rem" onclick="doRegister()">Create account</button>
-      <p style="font-size:12px;color:var(--text2);text-align:center;margin-top:1rem">Already have an account? <span style="color:var(--blue);cursor:pointer" onclick="switchAuthTab('login')">Log in</span></p>
+      <p style="font-size:12px;color:var(--text2);text-align:center;margin-top:1rem">Have an account? <span style="color:var(--blue);cursor:pointer" onclick="switchAuthTab('login')">Log in</span></p>
     </div>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div id="dashboard" style="display:none">
+
+  <!-- TOP NAV -->
   <nav class="nav">
     <span class="nav-brand" id="nav-brand">MarketDesk</span>
     <div class="nav-tabs">
@@ -208,23 +259,43 @@ textarea.form-input{min-height:80px;resize:vertical}
       <span class="nav-user" id="nav-user"></span>
       <button class="nav-logout" onclick="doLogout()">Log out</button>
     </div>
+    <div class="nav-logout-mobile">
+      <button class="nav-logout" onclick="doLogout()">Log out</button>
+    </div>
+  </nav>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav" id="bottom-nav">
+    <button class="bottom-nav-item active" onclick="showPage('approval')" data-page="approval">
+      <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <span>Approval</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showPage('approved')" data-page="approved">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <span>Vendors</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showPage('markets')" data-page="markets">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>Markets</span>
+    </button>
+    <button class="bottom-nav-item" onclick="showPage('public')" data-page="public">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      <span>Index</span>
+    </button>
   </nav>
 
   <!-- APPROVAL PAGE -->
-      <div id="page-approval" class="page active">
+  <div id="page-approval" class="page active">
     <div class="page-banner amber">
       <div class="page-banner-icon">&#9998;</div>
-      <div>
-        <div class="page-banner-title">Vendor Approval</div>
-        <div class="page-banner-desc">This is where you review incoming vendor applications. Vendors who fill in the Market Index form will appear here as pending. You can click on a vendor name to view their full details and stall photos, then select which vendors to approve or remove. When approving, you can choose exactly which market dates each vendor is allowed to attend.</div>
-      </div>
+      <div><div class="page-banner-title">Vendor Approval</div><div class="page-banner-desc">Review incoming applications. Click a vendor name to expand their details, then approve or remove them. When approving you can choose which market dates each vendor may attend.</div></div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-      <h2>Vendor Approval</h2>
-      <div style="display:flex;gap:8px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px" class="page-actions">
+      <h2 style="margin:0">Vendor Approval</h2>
+      <div class="btn-row">
         <button class="btn" onclick="exportCSV('pending')">Export CSV</button>
-        <button class="btn danger" onclick="disapproveSelected()">Remove Selected</button>
-        <button class="btn primary" onclick="approveSelected()">Approve Selected</button>
+        <button class="btn danger" onclick="disapproveSelected()">Remove</button>
+        <button class="btn primary" onclick="approveSelected()">Approve</button>
       </div>
     </div>
     <div class="metric-grid">
@@ -236,14 +307,18 @@ textarea.form-input{min-height:80px;resize:vertical}
     <div class="card">
       <div class="toolbar">
         <input class="search-input" type="text" placeholder="Search vendors..." oninput="renderPending(this.value)">
+        <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer"><input type="checkbox" id="check-all" onchange="toggleAll(this)"> Select all</label>
       </div>
-      <table class="vendor-table">
+      <!-- Desktop table -->
+      <table class="vendor-table desktop-table">
         <thead><tr>
-          <th style="width:36px"><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
+          <th style="width:36px"></th>
           <th>Stall name</th><th>Description</th><th>Markets</th><th>Submitted</th><th>Status</th>
         </tr></thead>
         <tbody id="pending-tbody"></tbody>
       </table>
+      <!-- Mobile cards -->
+      <div class="mobile-cards" id="pending-cards"></div>
       <div id="pending-empty" class="empty-state" style="display:none">No pending applications</div>
     </div>
   </div>
@@ -252,36 +327,32 @@ textarea.form-input{min-height:80px;resize:vertical}
   <div id="page-approved" class="page">
     <div class="page-banner green">
       <div class="page-banner-icon">&#10003;</div>
-      <div>
-        <div class="page-banner-title">Approved Vendors</div>
-        <div class="page-banner-desc">All vendors you have approved will appear here. You can track which markets each vendor is attending, view their total stall fee, and monitor payment status. Use the "Update Payment" button to mark a vendor as paid via PayFast, Yoco, or manual cash/EFT — or to flag them as outstanding. You can also filter by payment status to quickly see who still owes.</div>
-      </div>
+      <div><div class="page-banner-title">Approved Vendors</div><div class="page-banner-desc">Track which markets each vendor is attending, view stall fees, and monitor payment status. Use "Update Payment" to mark payments received via PayFast, Yoco, cash or EFT.</div></div>
     </div>
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-      <h2>Approved Vendors</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:10px" class="page-actions">
+      <h2 style="margin:0">Approved Vendors</h2>
       <button class="btn" onclick="exportCSV('approved')">Export CSV</button>
     </div>
     <div class="metric-grid">
       <div class="metric"><div class="metric-label">Total approved</div><div class="metric-value blue" id="m-app-total">0</div></div>
       <div class="metric"><div class="metric-label">Paid</div><div class="metric-value green" id="m-app-paid">0</div></div>
       <div class="metric"><div class="metric-label">Outstanding</div><div class="metric-value red" id="m-app-out">0</div></div>
-      <div class="metric"><div class="metric-label">Revenue expected</div><div class="metric-value" id="m-app-rev" style="font-size:16px">R0</div></div>
+      <div class="metric"><div class="metric-label">Expected revenue</div><div class="metric-value" id="m-app-rev" style="font-size:16px">R0</div></div>
     </div>
     <div class="card">
       <div class="toolbar">
         <input class="search-input" type="text" placeholder="Search vendors..." oninput="renderApproved(this.value, state.filterPayment)">
-        <select class="form-input" style="width:auto;padding:7px 12px" onchange="state.filterPayment=this.value;renderApproved('',this.value)">
-          <option value="">All payment statuses</option>
+        <select class="form-input" style="width:auto;padding:8px 12px;font-size:13px" onchange="state.filterPayment=this.value;renderApproved('',this.value)">
+          <option value="">All statuses</option>
           <option value="outstanding">Outstanding</option>
           <option value="paid">Paid</option>
         </select>
       </div>
-      <table class="vendor-table">
-        <thead><tr>
-          <th>Stall name</th><th>Markets attending</th><th>Stall fee</th><th>Payment</th><th>Method</th><th>Actions</th>
-        </tr></thead>
+      <table class="vendor-table desktop-table">
+        <thead><tr><th>Stall name</th><th>Markets</th><th>Fee</th><th>Payment</th><th>Method</th><th>Actions</th></tr></thead>
         <tbody id="approved-tbody"></tbody>
       </table>
+      <div class="mobile-cards" id="approved-cards"></div>
       <div id="approved-empty" class="empty-state" style="display:none">No approved vendors yet</div>
     </div>
   </div>
@@ -290,32 +361,26 @@ textarea.form-input{min-height:80px;resize:vertical}
   <div id="page-markets" class="page">
     <div class="page-banner teal">
       <div class="page-banner-icon">&#9776;</div>
-      <div>
-        <div class="page-banner-title">Market Instances</div>
-        <div class="page-banner-desc">Create and manage your individual market events here. Each market instance has its own name, description, banner image, stall fee, and dates. Once you publish a market instance, it becomes visible on the Market Index for vendors to browse and apply to. You can edit or unpublish a market at any time, and drafts will not be shown to vendors until published.</div>
-      </div>
+      <div><div class="page-banner-title">Market Instances</div><div class="page-banner-desc">Create and manage your market events. Add a banner image, dates, and stall fee per date. Published markets appear on the Market Index for vendors to browse and apply to.</div></div>
     </div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-      <h2>Market Instances</h2>
+      <h2 style="margin:0">Market Instances</h2>
       <button class="btn primary" onclick="openMarketModal(null)">+ New market</button>
     </div>
     <div id="markets-list"></div>
     <div id="markets-empty" class="empty-state" style="display:none">No market instances yet. Create one to get started.</div>
   </div>
 
-  <!-- PUBLIC / MARKET INDEX PAGE -->
-  <div id="page-public" class="page" style="background:var(--bg2);min-height:calc(100vh - 52px);padding:0">
+  <!-- MARKET INDEX PAGE -->
+  <div id="page-public" class="page" style="background:var(--bg2);padding:0;max-width:100%">
     <div class="public-page">
-      <div class="page-banner" style="margin-bottom:1.25rem">
+      <div class="page-banner blue" style="margin-bottom:1rem">
         <div class="page-banner-icon">&#128065;</div>
-        <div>
-          <div class="page-banner-title">Market Index — Vendor-facing page</div>
-          <div class="page-banner-desc">This is what vendors will see. They can browse your published markets and submit an application to attend. Vendors cannot see the rest of the dashboard — this page is the only part of the app that is public-facing. Applications submitted here will appear on your Vendor Approval page for you to review.</div>
-        </div>
+        <div><div class="page-banner-title">Market Index — Vendor-facing page</div><div class="page-banner-desc">This is what vendors will see. They can browse your published markets and submit an application. Vendors cannot see the rest of the dashboard.</div></div>
       </div>
       <div class="public-banner">
         <div class="public-banner-text">
-          <div style="font-size:22px;font-weight:500;color:var(--blue)" id="pub-title">Upcoming Markets</div>
+          <div style="font-size:20px;font-weight:500;color:var(--blue)" id="pub-title">Upcoming Markets</div>
           <div style="font-size:13px;color:var(--text2);margin-top:4px">Browse and apply to attend as a vendor</div>
         </div>
       </div>
@@ -325,236 +390,172 @@ textarea.form-input{min-height:80px;resize:vertical}
       </div>
       <div id="pub-browse">
         <div id="pub-markets-list"></div>
-        <div id="pub-markets-empty" class="empty-state" style="display:none">No markets published yet. Check back soon!</div>
+        <div id="pub-markets-empty" class="empty-state" style="display:none">No markets published yet.</div>
       </div>
       <div id="pub-apply" style="display:none">
         <div class="card">
           <h3 style="margin-bottom:1rem">Vendor application</h3>
+          <div class="form-group"><label class="form-label">Stall / shop name *</label><input class="form-input" id="v-name" type="text" placeholder="e.g. Sunshine Bakes"></div>
+          <div class="form-group"><label class="form-label">Description of what you sell *</label><textarea class="form-input" id="v-desc" placeholder="Tell us about your stall..."></textarea></div>
+          <div class="form-group"><label class="form-label">Contact email *</label><input class="form-input" id="v-email" type="email" placeholder="you@example.com"></div>
           <div class="form-group">
-            <label class="form-label">Stall / shop name *</label>
-            <input class="form-input" id="v-name" type="text" placeholder="e.g. Sunshine Bakes">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Description of what you sell *</label>
-            <textarea class="form-input" id="v-desc" placeholder="Tell us about your stall and what you offer..."></textarea>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Contact email *</label>
-            <input class="form-input" id="v-email" type="email" placeholder="you@example.com">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Select markets you want to attend *</label>
+            <label class="form-label">Select markets to attend *</label>
             <div id="v-market-checks" style="margin-top:8px"></div>
-            <div id="v-no-markets" style="font-size:13px;color:var(--text2);display:none">No published markets available at this time.</div>
+            <div id="v-no-markets" style="font-size:13px;color:var(--text2);display:none">No published markets available yet.</div>
           </div>
           <div class="form-group">
             <label class="form-label">Photos of your stall / products</label>
-            <div class="upload-box">
-              <input type="file" accept="image/*" multiple onchange="handleVendorImages(event)">
-              <div>&#8679; Click or drag images here — you can select multiple (max 4)</div>
-            </div>
+            <div class="upload-box"><input type="file" accept="image/*" multiple onchange="handleVendorImages(event)"><div>&#8679; Tap to add photos (max 4)</div></div>
             <div id="vendor-img-thumbs" class="img-thumb-grid"></div>
           </div>
-          <button class="btn primary" style="width:100%;margin-top:0.5rem" onclick="submitVendorForm()">Submit application</button>
-          <div id="v-success" style="display:none;margin-top:1rem;padding:12px;border-radius:8px;background:var(--green-bg);color:var(--green);font-size:13px;text-align:center">
-            Application submitted! You will be notified by email if approved.
-          </div>
+          <button class="btn primary" style="width:100%;margin-top:0.5rem;padding:12px" onclick="submitVendorForm()">Submit application</button>
+          <div id="v-success" style="display:none;margin-top:1rem;padding:12px;border-radius:8px;background:var(--green-bg);color:var(--green);font-size:13px;text-align:center">Application submitted! You'll be notified by email if approved.</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- REMOVE MODAL -->
+<!-- MODALS -->
 <div class="modal-overlay" id="remove-modal">
   <div class="modal">
-    <div class="modal-header">
-      <h3>Remove applicants?</h3>
-      <button class="modal-close" onclick="closeModal('remove-modal')">&#x2715;</button>
-    </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">The following applicants will be permanently removed:</p>
+    <div class="modal-handle"></div>
+    <div class="modal-header"><h3>Remove applicants?</h3><button class="modal-close" onclick="closeModal('remove-modal')">&#x2715;</button></div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:0.75rem">The following will be permanently removed:</p>
     <ul id="remove-modal-list" style="padding-left:1.25rem;margin-bottom:1rem"></ul>
     <p style="font-size:13px;color:var(--red);margin-bottom:1.25rem">This action cannot be undone.</p>
-    <div style="display:flex;gap:8px">
-      <button class="btn" style="flex:1" onclick="closeModal('remove-modal')">Cancel</button>
-      <button class="btn danger" style="flex:1" onclick="confirmRemove()">Yes, remove them</button>
-    </div>
+    <div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="closeModal('remove-modal')">Cancel</button><button class="btn danger" style="flex:1" onclick="confirmRemove()">Yes, remove</button></div>
   </div>
 </div>
 
-<!-- APPROVE MODAL -->
 <div class="modal-overlay" id="approve-modal">
   <div class="modal">
+    <div class="modal-handle"></div>
     <div class="modal-header">
-      <div>
-        <h3>Approve: <span id="approve-modal-name"></span></h3>
-        <div style="font-size:12px;color:var(--text2);margin-top:2px" id="approve-modal-count"></div>
-      </div>
+      <div><h3>Approve: <span id="approve-modal-name"></span></h3><div style="font-size:12px;color:var(--text2);margin-top:2px" id="approve-modal-count"></div></div>
       <button class="modal-close" onclick="skipApproval()">&#x2715;</button>
     </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Select which markets to approve this vendor for. Uncheck any you want to exclude.</p>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Select which markets to approve this vendor for.</p>
     <div id="approve-market-checks"></div>
-    <div style="display:flex;gap:8px;margin-top:1rem">
-      <button class="btn" style="flex:1" onclick="skipApproval()">Skip vendor</button>
-      <button class="btn primary" style="flex:1" onclick="confirmApproval()">Approve for selected markets</button>
-    </div>
+    <div style="display:flex;gap:8px;margin-top:1rem"><button class="btn" style="flex:1" onclick="skipApproval()">Skip</button><button class="btn primary" style="flex:1;padding:12px" onclick="confirmApproval()">Approve</button></div>
   </div>
 </div>
 
-<!-- PAYMENT MODAL -->
 <div class="modal-overlay" id="pay-modal">
   <div class="modal">
-    <div class="modal-header">
-      <h3>Update payment — <span id="pay-modal-name"></span></h3>
-      <button class="modal-close" onclick="closeModal('pay-modal')">&#x2715;</button>
-    </div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Select how payment was received, or manually override the status.</p>
+    <div class="modal-handle"></div>
+    <div class="modal-header"><h3>Payment — <span id="pay-modal-name"></span></h3><button class="modal-close" onclick="closeModal('pay-modal')">&#x2715;</button></div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Select how payment was received.</p>
     <div style="display:flex;flex-direction:column;gap:10px">
-      <button class="btn success" onclick="setPayment('payfast')">Mark paid via PayFast</button>
-      <button class="btn success" onclick="setPayment('yoco')">Mark paid via Yoco</button>
-      <button class="btn success" onclick="setPayment('manual')">Mark paid manually (cash / EFT)</button>
-      <button class="btn danger" onclick="setPayment('outstanding')">Mark as outstanding</button>
+      <button class="btn success" style="padding:12px" onclick="setPayment('payfast')">Paid via PayFast</button>
+      <button class="btn success" style="padding:12px" onclick="setPayment('yoco')">Paid via Yoco</button>
+      <button class="btn success" style="padding:12px" onclick="setPayment('manual')">Paid manually (cash / EFT)</button>
+      <button class="btn danger" style="padding:12px" onclick="setPayment('outstanding')">Mark as outstanding</button>
     </div>
-    <p style="font-size:11px;color:var(--text3);margin-top:1rem">Connect your PayFast/Yoco merchant credentials in Settings to enable automatic payment detection.</p>
+    <p style="font-size:11px;color:var(--text3);margin-top:1rem">Connect PayFast/Yoco credentials in Settings to enable automatic detection.</p>
   </div>
 </div>
 
-<!-- MARKET MODAL -->
 <div class="modal-overlay" id="market-modal">
   <div class="modal">
-    <div class="modal-header">
-      <h3 id="market-modal-title">New market instance</h3>
-      <button class="modal-close" onclick="closeModal('market-modal')">&#x2715;</button>
-    </div>
+    <div class="modal-handle"></div>
+    <div class="modal-header"><h3 id="market-modal-title">New market instance</h3><button class="modal-close" onclick="closeModal('market-modal')">&#x2715;</button></div>
     <div class="form-group">
       <label class="form-label">Banner image</label>
-      <div class="upload-box" id="banner-upload-box">
-        <input type="file" accept="image/*" onchange="handleBannerUpload(event)">
-        <div id="banner-upload-prompt">&#8679; Click or drag an image here (JPG, PNG, WEBP)</div>
-        <img id="banner-preview" style="display:none" class="upload-preview">
-      </div>
+      <div class="upload-box"><input type="file" accept="image/*" onchange="handleBannerUpload(event)"><div id="banner-upload-prompt">&#8679; Tap to upload a banner image</div><img id="banner-preview" style="display:none" class="upload-preview"></div>
       <button class="btn small danger" id="banner-remove-btn" style="margin-top:6px;display:none" onclick="removeBanner()">Remove banner</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">Market name *</label>
-      <input class="form-input" id="m-name" type="text" placeholder="e.g. Centurion Night Market">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Description</label>
-      <textarea class="form-input" id="m-desc" placeholder="Describe this market..."></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Header text</label>
-      <input class="form-input" id="m-header" type="text" placeholder="Short header for the banner">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Stall fee per date (R)</label>
-      <input class="form-input" id="m-fee" type="number" value="350" min="0">
-    </div>
+    <div class="form-group"><label class="form-label">Market name *</label><input class="form-input" id="m-name" type="text" placeholder="e.g. Centurion Night Market"></div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="m-desc" placeholder="Describe this market..."></textarea></div>
+    <div class="form-group"><label class="form-label">Header text</label><input class="form-input" id="m-header" type="text" placeholder="Short banner header"></div>
+    <div class="form-group"><label class="form-label">Stall fee per date (R)</label><input class="form-input" id="m-fee" type="number" value="350" min="0" inputmode="numeric"></div>
     <div class="form-group">
       <label class="form-label">Market dates</label>
-      <div style="display:flex;gap:8px">
-        <input class="form-input" id="m-date-pick" type="date" style="flex:1">
-        <button class="btn" onclick="addDate()">+ Add</button>
-      </div>
+      <div style="display:flex;gap:8px"><input class="form-input" id="m-date-pick" type="date" style="flex:1"><button class="btn" onclick="addDate()">+ Add</button></div>
       <div id="m-date-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div>
     </div>
-    <div style="display:flex;gap:8px;margin-top:0.5rem">
-      <button class="btn" style="flex:1" onclick="closeModal('market-modal')">Cancel</button>
-      <button class="btn primary" style="flex:1" onclick="saveMarket()">Save market</button>
-    </div>
+    <div style="display:flex;gap:8px;margin-top:0.5rem"><button class="btn" style="flex:1" onclick="closeModal('market-modal')">Cancel</button><button class="btn primary" style="flex:1;padding:12px" onclick="saveMarket()">Save market</button></div>
   </div>
 </div>
 
 <script>
-// ── AUTH ──────────────────────────────────────────────────────────────────────
-var accounts = [
-  {email:'demo@marketdesk.co.za', password:'demo1234', name:'Demo User', market:'Demo Market'}
-];
-var currentUser = null;
+var accounts=[{email:'demo@marketdesk.co.za',password:'demo1234',name:'Demo User',market:'Demo Market'}];
+var currentUser=null;
 
 function switchAuthTab(t){
   document.querySelectorAll('.auth-tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='login')||(i===1&&t==='register')));
-  document.getElementById('auth-login').style.display = t==='login'?'block':'none';
-  document.getElementById('auth-register').style.display = t==='register'?'block':'none';
-  clearAuthMessages();
+  document.getElementById('auth-login').style.display=t==='login'?'block':'none';
+  document.getElementById('auth-register').style.display=t==='register'?'block':'none';
+  clearAuthMsg();
 }
-
-function showAuthError(msg){ var el=document.getElementById('auth-error'); el.textContent=msg; el.style.display='block'; document.getElementById('auth-success').style.display='none'; }
-function showAuthSuccess(msg){ var el=document.getElementById('auth-success'); el.textContent=msg; el.style.display='block'; document.getElementById('auth-error').style.display='none'; }
-function clearAuthMessages(){ document.getElementById('auth-error').style.display='none'; document.getElementById('auth-success').style.display='none'; }
+function showAuthError(m){var e=document.getElementById('auth-error');e.textContent=m;e.style.display='block';document.getElementById('auth-success').style.display='none';}
+function showAuthSuccess(m){var e=document.getElementById('auth-success');e.textContent=m;e.style.display='block';document.getElementById('auth-error').style.display='none';}
+function clearAuthMsg(){document.getElementById('auth-error').style.display='none';document.getElementById('auth-success').style.display='none';}
 
 function doLogin(){
-  var email = document.getElementById('login-email').value.trim().toLowerCase();
-  var pass = document.getElementById('login-password').value;
-  if(!email||!pass){ showAuthError('Please fill in all fields.'); return; }
-  var acc = accounts.find(a=>a.email===email&&a.password===pass);
-  if(!acc){ showAuthError('Incorrect email or password.'); return; }
+  var email=document.getElementById('login-email').value.trim().toLowerCase();
+  var pass=document.getElementById('login-password').value;
+  if(!email||!pass){showAuthError('Please fill in all fields.');return;}
+  var acc=accounts.find(a=>a.email===email&&a.password===pass);
+  if(!acc){showAuthError('Incorrect email or password.');return;}
   loginAs(acc);
 }
-
 function doRegister(){
-  var market = document.getElementById('reg-market').value.trim();
-  var name = document.getElementById('reg-name').value.trim();
-  var email = document.getElementById('reg-email').value.trim().toLowerCase();
-  var pass = document.getElementById('reg-password').value;
-  var confirm = document.getElementById('reg-confirm').value;
-  if(!market||!name||!email||!pass||!confirm){ showAuthError('Please fill in all fields.'); return; }
-  if(!email.includes('@')){ showAuthError('Please enter a valid email address.'); return; }
-  if(pass.length < 6){ showAuthError('Password must be at least 6 characters.'); return; }
-  if(pass !== confirm){ showAuthError('Passwords do not match.'); return; }
-  if(accounts.find(a=>a.email===email)){ showAuthError('An account with this email already exists.'); return; }
-  var acc = {email, password:pass, name, market};
+  var market=document.getElementById('reg-market').value.trim();
+  var name=document.getElementById('reg-name').value.trim();
+  var email=document.getElementById('reg-email').value.trim().toLowerCase();
+  var pass=document.getElementById('reg-password').value;
+  var confirm=document.getElementById('reg-confirm').value;
+  if(!market||!name||!email||!pass||!confirm){showAuthError('Please fill in all fields.');return;}
+  if(!email.includes('@')){showAuthError('Please enter a valid email.');return;}
+  if(pass.length<6){showAuthError('Password must be at least 6 characters.');return;}
+  if(pass!==confirm){showAuthError('Passwords do not match.');return;}
+  if(accounts.find(a=>a.email===email)){showAuthError('An account with this email already exists.');return;}
+  var acc={email,password:pass,name,market};
   accounts.push(acc);
   showAuthSuccess('Account created! Logging you in...');
-  setTimeout(()=>loginAs(acc), 800);
+  setTimeout(()=>loginAs(acc),800);
 }
-
 function loginAs(acc){
-  currentUser = acc;
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  document.getElementById('nav-brand').innerHTML = '<span>'+esc(acc.market)+'</span> &ndash; Dashboard';
-  document.getElementById('nav-user').textContent = acc.name;
-  document.getElementById('pub-title').textContent = acc.market;
-  renderPending();
-  updateMetrics();
+  currentUser=acc;
+  document.getElementById('auth-screen').style.display='none';
+  document.getElementById('dashboard').style.display='block';
+  document.getElementById('nav-brand').innerHTML='<span>'+esc(acc.market)+'</span> &ndash; Dashboard';
+  document.getElementById('nav-user').textContent=acc.name;
+  document.getElementById('pub-title').textContent=acc.market;
+  renderPending();updateMetrics();
 }
-
 function doLogout(){
-  currentUser = null;
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('auth-screen').style.display = 'flex';
-  document.getElementById('login-email').value = '';
-  document.getElementById('login-password').value = '';
-  clearAuthMessages();
-  switchAuthTab('login');
+  currentUser=null;
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('auth-screen').style.display='flex';
+  document.getElementById('login-email').value='';
+  document.getElementById('login-password').value='';
+  clearAuthMsg();switchAuthTab('login');
 }
 
-// ── APP STATE ─────────────────────────────────────────────────────────────────
-var state = {
-  vendors:[], markets:[], editMarketId:null, payVendorId:null,
-  approvedToday:0, expandedRows:{}, filterPayment:'',
-  _approveQueue:[], _removeQueue:[], _tempDates:[], _tempBanner:null
-};
-var FEE_PER_MARKET = 350;
-var _vendorImages = [];
+var state={vendors:[],markets:[],editMarketId:null,payVendorId:null,approvedToday:0,expandedRows:{},filterPayment:'',_approveQueue:[],_removeQueue:[],_tempDates:[],_tempBanner:null};
+var FEE_PER_MARKET=350;
+var _vendorImages=[];
 
-function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
-function esc(s){ var d=document.createElement('div'); d.textContent=s||''; return d.innerHTML; }
-function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 
 function showPage(p){
   document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.bottom-nav-item').forEach(el=>el.classList.remove('active'));
   document.getElementById('page-'+p).classList.add('active');
   var map={approval:0,approved:1,markets:2,public:3};
   document.querySelectorAll('.nav-tab')[map[p]].classList.add('active');
-  if(p==='approval') renderPending();
-  if(p==='approved') renderApproved();
-  if(p==='markets') renderMarkets();
-  if(p==='public') renderPublic();
+  document.querySelectorAll('.bottom-nav-item')[map[p]].classList.add('active');
+  if(p==='approval')renderPending();
+  if(p==='approved')renderApproved();
+  if(p==='markets')renderMarkets();
+  if(p==='public')renderPublic();
   updateMetrics();
+  window.scrollTo(0,0);
 }
 
 function pubTab(t){
@@ -563,7 +564,7 @@ function pubTab(t){
   tabs[1].classList.toggle('active',t==='apply');
   document.getElementById('pub-browse').style.display=t==='browse'?'block':'none';
   document.getElementById('pub-apply').style.display=t==='apply'?'block':'none';
-  if(t==='apply') renderVendorFormMarkets();
+  if(t==='apply')renderVendorFormMarkets();
 }
 
 function updateMetrics(){
@@ -583,134 +584,157 @@ function updateMetrics(){
 
 function renderPending(filter){
   var list=state.vendors.filter(v=>v.status==='pending');
-  if(filter) list=list.filter(v=>v.name.toLowerCase().includes(filter.toLowerCase()));
+  if(filter)list=list.filter(v=>v.name.toLowerCase().includes(filter.toLowerCase()));
   var tb=document.getElementById('pending-tbody');
+  var cards=document.getElementById('pending-cards');
   var empty=document.getElementById('pending-empty');
-  if(!list.length){ tb.innerHTML=''; empty.style.display='block'; return; }
+  if(!list.length){tb.innerHTML='';cards.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
+  // Desktop table
   tb.innerHTML=list.map(v=>{
-    var mchips=v.markets.map(mid=>{ var m=state.markets.find(x=>x.id===mid); return m?'<span class="chip">'+esc(m.name)+'</span>':''; }).join('');
+    var mchips=v.markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?'<span class="chip">'+esc(m.name)+'</span>':''}).join('');
     var exp=state.expandedRows[v.id];
+    var photos=v.images&&v.images.length?'<div style="grid-column:1/-1"><div class="field-label">Stall photos</div><div class="img-thumb-grid" style="margin-top:4px">'+v.images.map(src=>'<div class="img-thumb"><img src="'+src+'"></div>').join('')+'</div></div>':'';
     var rows='<tr><td><input type="checkbox" class="v-check" value="'+v.id+'"></td>'
       +'<td><button class="vendor-name-btn" onclick="toggleExpand(\''+v.id+'\')">'+esc(v.name)+'</button></td>'
-      +'<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">'+esc(v.desc)+'</td>'
-      +'<td><span class="badge" style="background:var(--teal-bg);color:var(--teal)">'+v.markets.length+' market'+(v.markets.length!==1?'s':'')+'</span></td>'
+      +'<td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">'+esc(v.desc)+'</td>'
+      +'<td><span class="badge" style="background:var(--teal-bg);color:var(--teal)">'+v.markets.length+' mkt'+(v.markets.length!==1?'s':'')+'</span></td>'
       +'<td style="color:var(--text2)">'+v.submitted+'</td>'
       +'<td><span class="badge pending">Pending</span></td></tr>';
-    if(exp){
-      var photos=v.images&&v.images.length?'<div style="grid-column:1/-1"><div class="field-label">Stall photos</div><div class="img-thumb-grid" style="margin-top:4px">'+v.images.map(src=>'<div class="img-thumb"><img src="'+src+'"></div>').join('')+'</div></div>':'';
-      rows+='<tr class="expand-row"><td colspan="6"><div class="expand-inner">'
-        +'<div><div class="field-label">Stall name</div><div class="field-value">'+esc(v.name)+'</div></div>'
-        +'<div><div class="field-label">Contact email</div><div class="field-value">'+esc(v.email)+'</div></div>'
-        +'<div style="grid-column:1/-1"><div class="field-label">Description</div><div class="field-value">'+esc(v.desc)+'</div></div>'
-        +'<div style="grid-column:1/-1"><div class="field-label">Markets selected</div><div class="market-chips" style="margin-top:4px">'+(mchips||'None')+'</div></div>'
-        +'<div style="grid-column:1/-1"><div class="field-label">Estimated stall fee</div><div class="field-value" style="font-weight:500">R'+(v.markets.length*FEE_PER_MARKET).toLocaleString()+'</div></div>'
-        +photos
-        +'</div></td></tr>';
-    }
+    if(exp){rows+='<tr class="expand-row"><td colspan="6"><div class="expand-inner">'
+      +'<div><div class="field-label">Email</div><div class="field-value">'+esc(v.email)+'</div></div>'
+      +'<div><div class="field-label">Est. fee</div><div class="field-value" style="font-weight:500">R'+(v.markets.length*FEE_PER_MARKET).toLocaleString()+'</div></div>'
+      +'<div style="grid-column:1/-1"><div class="field-label">Description</div><div class="field-value">'+esc(v.desc)+'</div></div>'
+      +'<div style="grid-column:1/-1"><div class="field-label">Markets selected</div><div class="market-chips" style="margin-top:4px">'+(mchips||'None')+'</div></div>'
+      +photos+'</div></td></tr>';}
     return rows;
+  }).join('');
+  // Mobile cards
+  cards.innerHTML=list.map(v=>{
+    var mchips=v.markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?'<span class="chip">'+esc(m.name)+'</span>':''}).join('');
+    var exp=state.expandedRows[v.id+'_m'];
+    var photos=v.images&&v.images.length?'<div><div class="field-label">Stall photos</div><div class="img-thumb-grid" style="margin-top:4px">'+v.images.map(src=>'<div class="img-thumb"><img src="'+src+'"></div>').join('')+'</div></div>':'';
+    var expand=exp?'<div class="vendor-card-expand">'
+      +'<div class="field-label">Email</div><div class="field-value">'+esc(v.email)+'</div>'
+      +'<div class="field-label">Description</div><div class="field-value">'+esc(v.desc)+'</div>'
+      +'<div class="field-label">Markets</div><div class="market-chips" style="margin-top:4px">'+(mchips||'None')+'</div>'
+      +'<div class="field-label">Est. fee</div><div class="field-value" style="font-weight:500">R'+(v.markets.length*FEE_PER_MARKET).toLocaleString()+'</div>'
+      +photos+'</div>':'';
+    return '<div class="vendor-card">'
+      +'<div class="vendor-card-header">'
+      +'<div class="vendor-card-check"><input type="checkbox" class="v-check" value="'+v.id+'"></div>'
+      +'<div class="vendor-card-name" onclick="toggleExpandMobile(\''+v.id+'\')">'+esc(v.name)+'</div>'
+      +'<div class="vendor-card-badge"><span class="badge pending">Pending</span></div>'
+      +'</div>'
+      +'<div class="vendor-card-meta">'+v.markets.length+' market'+(v.markets.length!==1?'s':'')+' &middot; '+v.submitted+'</div>'
+      +expand+'</div>';
   }).join('');
 }
 
-function toggleExpand(id){ state.expandedRows[id]=!state.expandedRows[id]; renderPending(); }
-function toggleAll(cb){ document.querySelectorAll('.v-check').forEach(c=>c.checked=cb.checked); }
+function toggleExpand(id){state.expandedRows[id]=!state.expandedRows[id];renderPending();}
+function toggleExpandMobile(id){state.expandedRows[id+'_m']=!state.expandedRows[id+'_m'];renderPending();}
+function toggleAll(cb){document.querySelectorAll('.v-check').forEach(c=>c.checked=cb.checked);}
 
 function disapproveSelected(){
   var checked=Array.from(document.querySelectorAll('.v-check:checked')).map(c=>c.value);
-  if(!checked.length){ alert('Select at least one vendor to remove.'); return; }
+  if(!checked.length){alert('Select at least one vendor to remove.');return;}
   state._removeQueue=checked;
-  var names=checked.map(id=>{ var v=state.vendors.find(x=>x.id===id); return v?v.name:null; }).filter(Boolean);
+  var names=checked.map(id=>{var v=state.vendors.find(x=>x.id===id);return v?v.name:null;}).filter(Boolean);
   document.getElementById('remove-modal-list').innerHTML=names.map(n=>'<li style="padding:4px 0;font-size:13px">'+esc(n)+'</li>').join('');
   document.getElementById('remove-modal').classList.add('open');
 }
-
 function confirmRemove(){
   state.vendors=state.vendors.filter(v=>!state._removeQueue.includes(v.id));
-  state._removeQueue=[];
-  closeModal('remove-modal');
-  renderPending();
-  updateMetrics();
+  state._removeQueue=[];closeModal('remove-modal');renderPending();updateMetrics();
 }
-
 function approveSelected(){
   var checked=Array.from(document.querySelectorAll('.v-check:checked')).map(c=>c.value);
-  if(!checked.length){ alert('Select at least one vendor to approve.'); return; }
-  state._approveQueue=checked.slice();
-  openNextApproval();
+  if(!checked.length){alert('Select at least one vendor to approve.');return;}
+  state._approveQueue=checked.slice();openNextApproval();
 }
-
 function openNextApproval(){
-  if(!state._approveQueue.length){ updateMetrics(); renderPending(); return; }
+  if(!state._approveQueue.length){updateMetrics();renderPending();return;}
   var id=state._approveQueue[0];
   var v=state.vendors.find(x=>x.id===id);
-  if(!v){ state._approveQueue.shift(); openNextApproval(); return; }
+  if(!v){state._approveQueue.shift();openNextApproval();return;}
   document.getElementById('approve-modal-name').textContent=v.name;
   document.getElementById('approve-modal-count').textContent=state._approveQueue.length>1?state._approveQueue.length+' vendors in queue':'';
   document.getElementById('approve-market-checks').innerHTML=v.markets.map(mid=>{
-    var m=state.markets.find(x=>x.id===mid); if(!m) return '';
-    return '<label style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:0.5px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:6px">'
-      +'<input type="checkbox" class="approve-mkt-cb" value="'+mid+'" checked style="width:16px;height:16px;accent-color:var(--blue)">'
-      +'<div><div style="font-size:13px;font-weight:500">'+esc(m.name)+'</div>'
-      +'<div style="font-size:11px;color:var(--text2)">'+m.dates.join(' · ')+' &nbsp;·&nbsp; R'+(m.fee||FEE_PER_MARKET)+' per date</div></div></label>';
+    var m=state.markets.find(x=>x.id===mid);if(!m)return'';
+    return '<label style="display:flex;align-items:center;gap:10px;padding:12px;border:0.5px solid var(--border);border-radius:8px;cursor:pointer;margin-bottom:8px">'
+      +'<input type="checkbox" class="approve-mkt-cb" value="'+mid+'" checked style="width:18px;height:18px;accent-color:var(--blue)">'
+      +'<div><div style="font-size:14px;font-weight:500">'+esc(m.name)+'</div>'
+      +'<div style="font-size:12px;color:var(--text2)">'+m.dates.join(' · ')+' · R'+(m.fee||FEE_PER_MARKET)+'/date</div></div></label>';
   }).join('');
   document.getElementById('approve-modal').classList.add('open');
 }
-
 function confirmApproval(){
   var id=state._approveQueue.shift();
   var v=state.vendors.find(x=>x.id===id);
   var selected=Array.from(document.querySelectorAll('.approve-mkt-cb:checked')).map(c=>c.value);
-  if(!selected.length){ alert('Select at least one market to approve this vendor for.'); state._approveQueue.unshift(id); return; }
-  v.status='approved'; v.markets=selected; v.payStatus='outstanding'; v.payMethod=null;
-  v.approvedAt=new Date().toLocaleDateString('en-ZA');
-  state.approvedToday++;
-  closeModal('approve-modal');
-  setTimeout(openNextApproval, 200);
+  if(!selected.length){alert('Select at least one market.');state._approveQueue.unshift(id);return;}
+  v.status='approved';v.markets=selected;v.payStatus='outstanding';v.payMethod=null;
+  v.approvedAt=new Date().toLocaleDateString('en-ZA');state.approvedToday++;
+  closeModal('approve-modal');setTimeout(openNextApproval,200);
 }
+function skipApproval(){state._approveQueue.shift();closeModal('approve-modal');setTimeout(openNextApproval,200);}
 
-function skipApproval(){ state._approveQueue.shift(); closeModal('approve-modal'); setTimeout(openNextApproval,200); }
-
-function renderApproved(filter, payFilter){
-  filter=filter||''; payFilter=payFilter||state.filterPayment||'';
+function renderApproved(filter,payFilter){
+  filter=filter||'';payFilter=payFilter||state.filterPayment||'';
   var list=state.vendors.filter(v=>v.status==='approved');
-  if(filter) list=list.filter(v=>v.name.toLowerCase().includes(filter.toLowerCase()));
-  if(payFilter) list=list.filter(v=>payFilter==='paid'?v.payStatus==='paid':v.payStatus!=='paid');
+  if(filter)list=list.filter(v=>v.name.toLowerCase().includes(filter.toLowerCase()));
+  if(payFilter)list=list.filter(v=>payFilter==='paid'?v.payStatus==='paid':v.payStatus!=='paid');
   var tb=document.getElementById('approved-tbody');
+  var cards=document.getElementById('approved-cards');
   var empty=document.getElementById('approved-empty');
-  if(!list.length){ tb.innerHTML=''; empty.style.display='block'; updateMetrics(); return; }
+  if(!list.length){tb.innerHTML='';cards.innerHTML='';empty.style.display='block';updateMetrics();return;}
   empty.style.display='none';
   tb.innerHTML=list.map(v=>{
     var fee=v.markets.length*(v.feePerMarket||FEE_PER_MARKET);
-    var chips=v.markets.map(mid=>{ var m=state.markets.find(x=>x.id===mid); return m?'<span class="chip">'+esc(m.name)+'</span>':''; }).join('');
+    var chips=v.markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?'<span class="chip">'+esc(m.name)+'</span>':''}).join('');
     var payBadge=v.payStatus==='paid'?'<span class="badge paid">Paid</span>':'<span class="badge outstanding">Outstanding</span>';
     var method=v.payMethod?'<span class="badge '+v.payMethod+'">'+v.payMethod.charAt(0).toUpperCase()+v.payMethod.slice(1)+'</span>':'<span style="color:var(--text3);font-size:12px">—</span>';
     return '<tr><td><strong>'+esc(v.name)+'</strong><br><span style="font-size:11px;color:var(--text2)">'+esc(v.email)+'</span></td>'
       +'<td><div class="market-chips">'+(chips||'—')+'</div></td>'
       +'<td style="font-weight:500">R'+fee.toLocaleString()+'</td>'
       +'<td>'+payBadge+'</td><td>'+method+'</td>'
-      +'<td><button class="btn small" onclick="openPayModal(\''+v.id+'\')">Update payment</button></td></tr>';
+      +'<td><button class="btn small" onclick="openPayModal(\''+v.id+'\')">Update</button></td></tr>';
+  }).join('');
+  cards.innerHTML=list.map(v=>{
+    var fee=v.markets.length*(v.feePerMarket||FEE_PER_MARKET);
+    var chips=v.markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?'<span class="chip">'+esc(m.name)+'</span>':''}).join('');
+    var payBadge=v.payStatus==='paid'?'<span class="badge paid">Paid</span>':'<span class="badge outstanding">Outstanding</span>';
+    return '<div class="vendor-card">'
+      +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">'
+      +'<div><strong style="font-size:14px">'+esc(v.name)+'</strong><div style="font-size:11px;color:var(--text2)">'+esc(v.email)+'</div></div>'
+      +payBadge+'</div>'
+      +'<div class="market-chips" style="margin-bottom:8px">'+(chips||'—')+'</div>'
+      +'<div style="display:flex;align-items:center;justify-content:space-between">'
+      +'<span style="font-size:13px;font-weight:500">R'+fee.toLocaleString()+'</span>'
+      +'<button class="btn small" onclick="openPayModal(\''+v.id+'\')">Update payment</button>'
+      +'</div></div>';
   }).join('');
   updateMetrics();
 }
 
-function openPayModal(id){ state.payVendorId=id; var v=state.vendors.find(x=>x.id===id); document.getElementById('pay-modal-name').textContent=v.name; document.getElementById('pay-modal').classList.add('open'); }
-function setPayment(method){ var v=state.vendors.find(x=>x.id===state.payVendorId); if(v){ v.payStatus=method==='outstanding'?'outstanding':'paid'; v.payMethod=method==='outstanding'?null:method; } closeModal('pay-modal'); renderApproved(); }
+function openPayModal(id){state.payVendorId=id;var v=state.vendors.find(x=>x.id===id);document.getElementById('pay-modal-name').textContent=v.name;document.getElementById('pay-modal').classList.add('open');}
+function setPayment(method){var v=state.vendors.find(x=>x.id===state.payVendorId);if(v){v.payStatus=method==='outstanding'?'outstanding':'paid';v.payMethod=method==='outstanding'?null:method;}closeModal('pay-modal');renderApproved();}
 
 function renderMarkets(){
   var el=document.getElementById('markets-list');
   var empty=document.getElementById('markets-empty');
-  if(!state.markets.length){ el.innerHTML=''; empty.style.display='block'; return; }
+  if(!state.markets.length){el.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   el.innerHTML=state.markets.map(m=>{
     var dates=m.dates.map(d=>'<span class="date-chip">'+d+'</span>').join('');
     var pub=m.published?'<span class="published-badge on"><span class="dot green"></span> Published</span>':'<span class="published-badge off"><span class="dot gray"></span> Draft</span>';
     var bannerInner=m.banner?'<img src="'+m.banner+'"><span class="market-banner-label">'+esc(m.header||m.name)+'</span>':esc(m.header||m.name);
     return '<div class="market-card">'
-      +'<div class="market-banner">'+bannerInner+'<span class="market-banner-fee">R'+(m.fee||FEE_PER_MARKET)+' per date</span></div>'
-      +'<div class="market-body"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px"><strong style="font-size:15px">'+esc(m.name)+'</strong>'+pub+'</div>'
+      +'<div class="market-banner">'+bannerInner+'<span class="market-banner-fee">R'+(m.fee||FEE_PER_MARKET)+'/date</span></div>'
+      +'<div class="market-body"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:8px"><strong style="font-size:15px">'+esc(m.name)+'</strong>'+pub+'</div>'
       +'<p style="font-size:13px;color:var(--text2);margin-bottom:8px">'+esc(m.desc||'')+'</p>'
       +'<div class="date-chips">'+dates+'</div></div>'
-      +'<div class="market-footer"><div style="display:flex;gap:8px">'
+      +'<div class="market-footer"><div class="btn-row">'
       +'<button class="btn small" onclick="openMarketModal(\''+m.id+'\')">Edit</button>'
       +'<button class="btn small '+(m.published?'danger':'success')+'" onclick="togglePublish(\''+m.id+'\')">'+(m.published?'Unpublish':'Publish')+'</button>'
       +'<button class="btn small danger" onclick="deleteMarket(\''+m.id+'\')">Delete</button>'
@@ -719,14 +743,14 @@ function renderMarkets(){
 }
 
 function handleBannerUpload(e){
-  var file=e.target.files[0]; if(!file) return;
-  var r=new FileReader(); r.onload=function(ev){
+  var file=e.target.files[0];if(!file)return;
+  var r=new FileReader();r.onload=function(ev){
     state._tempBanner=ev.target.result;
     document.getElementById('banner-preview').src=ev.target.result;
     document.getElementById('banner-preview').style.display='block';
     document.getElementById('banner-upload-prompt').style.display='none';
     document.getElementById('banner-remove-btn').style.display='inline-flex';
-  }; r.readAsDataURL(file);
+  };r.readAsDataURL(file);
 }
 function removeBanner(){
   state._tempBanner=null;
@@ -735,7 +759,6 @@ function removeBanner(){
   document.getElementById('banner-upload-prompt').style.display='block';
   document.getElementById('banner-remove-btn').style.display='none';
 }
-
 function openMarketModal(id){
   state.editMarketId=id;
   var m=id?state.markets.find(x=>x.id===id):null;
@@ -749,35 +772,31 @@ function openMarketModal(id){
   var prev=document.getElementById('banner-preview');
   var prompt=document.getElementById('banner-upload-prompt');
   var rb=document.getElementById('banner-remove-btn');
-  if(state._tempBanner){ prev.src=state._tempBanner; prev.style.display='block'; prompt.style.display='none'; rb.style.display='inline-flex'; }
-  else { prev.src=''; prev.style.display='none'; prompt.style.display='block'; rb.style.display='none'; }
+  if(state._tempBanner){prev.src=state._tempBanner;prev.style.display='block';prompt.style.display='none';rb.style.display='inline-flex';}
+  else{prev.src='';prev.style.display='none';prompt.style.display='block';rb.style.display='none';}
   renderDateList();
   document.getElementById('market-modal').classList.add('open');
 }
-
-function addDate(){ var val=document.getElementById('m-date-pick').value; if(!val) return; if(!state._tempDates.includes(val)) state._tempDates.push(val); document.getElementById('m-date-pick').value=''; renderDateList(); }
-function removeDate(d){ state._tempDates=state._tempDates.filter(x=>x!==d); renderDateList(); }
-function renderDateList(){ document.getElementById('m-date-list').innerHTML=state._tempDates.map(d=>'<span class="date-chip" style="cursor:pointer" onclick="removeDate(\''+d+'\')">'+d+' &#x2715;</span>').join(''); }
-
+function addDate(){var val=document.getElementById('m-date-pick').value;if(!val)return;if(!state._tempDates.includes(val))state._tempDates.push(val);document.getElementById('m-date-pick').value='';renderDateList();}
+function removeDate(d){state._tempDates=state._tempDates.filter(x=>x!==d);renderDateList();}
+function renderDateList(){document.getElementById('m-date-list').innerHTML=state._tempDates.map(d=>'<span class="date-chip" style="cursor:pointer" onclick="removeDate(\''+d+'\')">'+d+' &#x2715;</span>').join('');}
 function saveMarket(){
   var name=document.getElementById('m-name').value.trim();
-  if(!name){ alert('Market name is required.'); return; }
+  if(!name){alert('Market name is required.');return;}
   var m={id:state.editMarketId||uid(),name,desc:document.getElementById('m-desc').value.trim(),header:document.getElementById('m-header').value.trim(),fee:parseInt(document.getElementById('m-fee').value)||FEE_PER_MARKET,dates:[...state._tempDates],banner:state._tempBanner||null,published:false};
-  if(state.editMarketId){ var i=state.markets.findIndex(x=>x.id===state.editMarketId); m.published=state.markets[i].published; state.markets[i]=m; }
+  if(state.editMarketId){var i=state.markets.findIndex(x=>x.id===state.editMarketId);m.published=state.markets[i].published;state.markets[i]=m;}
   else state.markets.push(m);
-  closeModal('market-modal'); renderMarkets(); updateMetrics();
+  closeModal('market-modal');renderMarkets();updateMetrics();
 }
+function togglePublish(id){var m=state.markets.find(x=>x.id===id);if(m)m.published=!m.published;renderMarkets();updateMetrics();}
+function deleteMarket(id){state.markets=state.markets.filter(x=>x.id!==id);renderMarkets();updateMetrics();}
 
-function togglePublish(id){ var m=state.markets.find(x=>x.id===id); if(m) m.published=!m.published; renderMarkets(); updateMetrics(); }
-function deleteMarket(id){ state.markets=state.markets.filter(x=>x.id!==id); renderMarkets(); updateMetrics(); }
-
-function renderPublic(){ renderPubMarkets(); renderVendorFormMarkets(); }
-
+function renderPublic(){renderPubMarkets();renderVendorFormMarkets();}
 function renderPubMarkets(){
   var pub=state.markets.filter(m=>m.published);
   var el=document.getElementById('pub-markets-list');
   var empty=document.getElementById('pub-markets-empty');
-  if(!pub.length){ el.innerHTML=''; empty.style.display='block'; return; }
+  if(!pub.length){el.innerHTML='';empty.style.display='block';return;}
   empty.style.display='none';
   el.innerHTML=pub.map(m=>{
     var dates=m.dates.map(d=>'<span class="date-chip">'+d+'</span>').join('');
@@ -787,73 +806,65 @@ function renderPubMarkets(){
       +'<div class="market-body"><strong style="font-size:15px">'+esc(m.name)+'</strong>'
       +'<p style="font-size:13px;color:var(--text2);margin:6px 0 8px">'+esc(m.desc||'')+'</p>'
       +'<div class="date-chips">'+dates+'</div></div>'
-      +'<div class="market-footer"><span style="font-size:12px;color:var(--text2)">Stall fee: R'+(m.fee||FEE_PER_MARKET)+' per date</span>'
+      +'<div class="market-footer"><span style="font-size:12px;color:var(--text2)">Stall fee: R'+(m.fee||FEE_PER_MARKET)+'/date</span>'
       +'<button class="btn small primary" onclick="pubTab(\'apply\')">Apply to attend</button></div></div>';
   }).join('');
 }
-
 function renderVendorFormMarkets(){
   var pub=state.markets.filter(m=>m.published);
   var el=document.getElementById('v-market-checks');
   var noM=document.getElementById('v-no-markets');
-  if(!pub.length){ el.innerHTML=''; noM.style.display='block'; return; }
+  if(!pub.length){el.innerHTML='';noM.style.display='block';return;}
   noM.style.display='none';
   el.innerHTML=pub.map(m=>'<div class="market-select-card" onclick="toggleMktCheck(\''+m.id+'\',this)">'
     +'<input type="checkbox" class="v-mkt-check" id="vc-'+m.id+'" value="'+m.id+'" onclick="event.stopPropagation();this.closest(\'.market-select-card\').classList.toggle(\'selected\',this.checked)">'
     +'<div><div style="font-weight:500;font-size:14px">'+esc(m.name)+'</div>'
     +'<div style="font-size:12px;color:var(--text2);margin-top:2px">'+(m.dates.join(' · ')||'Dates TBC')+'</div>'
-    +'<div style="font-size:12px;color:var(--text3);margin-top:2px">Stall fee: R'+(m.fee||FEE_PER_MARKET)+' per date</div></div></div>'
+    +'<div style="font-size:12px;color:var(--text3);margin-top:2px">Stall fee: R'+(m.fee||FEE_PER_MARKET)+'/date</div></div></div>'
   ).join('');
 }
-
-function toggleMktCheck(id,card){ var cb=document.getElementById('vc-'+id); cb.checked=!cb.checked; card.classList.toggle('selected',cb.checked); }
+function toggleMktCheck(id,card){var cb=document.getElementById('vc-'+id);cb.checked=!cb.checked;card.classList.toggle('selected',cb.checked);}
 
 function handleVendorImages(e){
   var files=Array.from(e.target.files).slice(0,4-_vendorImages.length);
-  files.forEach(file=>{ if(_vendorImages.length>=4) return; var r=new FileReader(); r.onload=function(ev){ _vendorImages.push(ev.target.result); renderVendorThumbs(); }; r.readAsDataURL(file); });
+  files.forEach(file=>{if(_vendorImages.length>=4)return;var r=new FileReader();r.onload=function(ev){_vendorImages.push(ev.target.result);renderVendorThumbs();};r.readAsDataURL(file);});
 }
-function removeVendorImg(i){ _vendorImages.splice(i,1); renderVendorThumbs(); }
-function renderVendorThumbs(){ document.getElementById('vendor-img-thumbs').innerHTML=_vendorImages.map((src,i)=>'<div class="img-thumb"><img src="'+src+'"><button class="img-thumb-remove" onclick="removeVendorImg('+i+')">&#x2715;</button></div>').join(''); }
+function removeVendorImg(i){_vendorImages.splice(i,1);renderVendorThumbs();}
+function renderVendorThumbs(){document.getElementById('vendor-img-thumbs').innerHTML=_vendorImages.map((src,i)=>'<div class="img-thumb"><img src="'+src+'"><button class="img-thumb-remove" onclick="removeVendorImg('+i+')">&#x2715;</button></div>').join('');}
 
 function submitVendorForm(){
   var name=document.getElementById('v-name').value.trim();
   var desc=document.getElementById('v-desc').value.trim();
   var email=document.getElementById('v-email').value.trim();
   var markets=Array.from(document.querySelectorAll('.v-mkt-check:checked')).map(c=>c.value);
-  if(!name||!desc||!email){ alert('Please fill in all required fields.'); return; }
-  if(!markets.length){ alert('Please select at least one market to attend.'); return; }
-  if(!email.includes('@')){ alert('Please enter a valid email address.'); return; }
+  if(!name||!desc||!email){alert('Please fill in all required fields.');return;}
+  if(!markets.length){alert('Please select at least one market.');return;}
+  if(!email.includes('@')){alert('Please enter a valid email address.');return;}
   state.vendors.push({id:uid(),name,desc,email,markets,images:[..._vendorImages],status:'pending',payStatus:'outstanding',payMethod:null,submitted:new Date().toLocaleDateString('en-ZA'),feePerMarket:FEE_PER_MARKET});
-  document.getElementById('v-name').value='';
-  document.getElementById('v-desc').value='';
-  document.getElementById('v-email').value='';
-  _vendorImages=[]; renderVendorThumbs();
-  document.querySelectorAll('.v-mkt-check').forEach(c=>{ c.checked=false; c.closest('.market-select-card').classList.remove('selected'); });
-  var s=document.getElementById('v-success'); s.style.display='block'; setTimeout(()=>s.style.display='none',4000);
+  document.getElementById('v-name').value='';document.getElementById('v-desc').value='';document.getElementById('v-email').value='';
+  _vendorImages=[];renderVendorThumbs();
+  document.querySelectorAll('.v-mkt-check').forEach(c=>{c.checked=false;c.closest('.market-select-card').classList.remove('selected');});
+  var s=document.getElementById('v-success');s.style.display='block';setTimeout(()=>s.style.display='none',4000);
   updateMetrics();
 }
 
 function exportCSV(type){
   var list=type==='pending'?state.vendors.filter(v=>v.status==='pending'):state.vendors.filter(v=>v.status==='approved');
-  if(!list.length){ alert('No vendors to export.'); return; }
+  if(!list.length){alert('No vendors to export.');return;}
   var headers=type==='pending'?['Name','Email','Description','Markets','Submitted']:['Name','Email','Markets','Stall Fee (R)','Payment Status','Payment Method','Approved'];
-  var rows=list.map(v=>{
-    var mnames=v.markets.map(mid=>{ var m=state.markets.find(x=>x.id===mid); return m?m.name:'?'; }).join('; ');
-    var fee=v.markets.length*(v.feePerMarket||FEE_PER_MARKET);
-    return type==='pending'?[v.name,v.email,v.desc,mnames,v.submitted]:[v.name,v.email,mnames,fee,v.payStatus||'outstanding',v.payMethod||'',v.approvedAt||''];
-  });
+  var rows=list.map(v=>{var mnames=v.markets.map(mid=>{var m=state.markets.find(x=>x.id===mid);return m?m.name:'?';}).join('; ');var fee=v.markets.length*(v.feePerMarket||FEE_PER_MARKET);return type==='pending'?[v.name,v.email,v.desc,mnames,v.submitted]:[v.name,v.email,mnames,fee,v.payStatus||'outstanding',v.payMethod||'',v.approvedAt||''];});
   var csv=[headers,...rows].map(r=>r.map(c=>'"'+(c||'').toString().replace(/"/g,'""')+'"').join(',')).join('\n');
-  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=type+'-vendors.csv'; a.click();
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=type+'-vendors.csv';a.click();
 }
 
-// Seed demo data
+// Seed
 state.markets.push({id:'m1',name:'Centurion Night Market',desc:'Monthly evening market with food, crafts and live music.',header:'Centurion Night Market',fee:350,dates:['2026-04-12','2026-05-10','2026-06-14'],published:true,banner:null});
 state.markets.push({id:'m2',name:'Midrand Makers Fair',desc:'A showcase for artisans, makers, and local producers.',header:'Midrand Makers Fair',fee:400,dates:['2026-04-26','2026-05-24'],published:true,banner:null});
-state.markets.push({id:'m3',name:'Pretoria Heritage Market',desc:'Celebrating local culture and heritage through food and crafts.',header:'Heritage Market',fee:300,dates:['2026-07-05'],published:false,banner:null});
+state.markets.push({id:'m3',name:'Pretoria Heritage Market',desc:'Celebrating local culture and heritage.',header:'Heritage Market',fee:300,dates:['2026-07-05'],published:false,banner:null});
 state.vendors.push({id:'v1',name:'Sunshine Bakes',desc:'Artisan breads, pastries and cakes.',email:'sunshine@bakes.co.za',markets:['m1','m2'],images:[],status:'pending',payStatus:'outstanding',payMethod:null,submitted:'2026-03-20',feePerMarket:350});
 state.vendors.push({id:'v2',name:'Green Roots',desc:'Organic vegetables and herbs.',email:'info@greenroots.co.za',markets:['m1'],images:[],status:'pending',payStatus:'outstanding',payMethod:null,submitted:'2026-03-21',feePerMarket:350});
 state.vendors.push({id:'v3',name:'Craft & Thread',desc:'Handmade clothing and textile art.',email:'craftnthread@gmail.com',markets:['m1','m2'],images:[],status:'approved',payStatus:'paid',payMethod:'payfast',submitted:'2026-03-15',approvedAt:'2026-03-18',feePerMarket:350});
-state.vendors.push({id:'v4',name:'The Spice Route',desc:'Imported and local spices and curry pastes.',email:'spiceroute@outlook.com',markets:['m2'],images:[],status:'approved',payStatus:'outstanding',payMethod:null,submitted:'2026-03-16',approvedAt:'2026-03-18',feePerMarket:400});
+state.vendors.push({id:'v4',name:'The Spice Route',desc:'Imported spices and curry pastes.',email:'spiceroute@outlook.com',markets:['m2'],images:[],status:'approved',payStatus:'outstanding',payMethod:null,submitted:'2026-03-16',approvedAt:'2026-03-18',feePerMarket:400});
 </script>
 </body>
 </html>
