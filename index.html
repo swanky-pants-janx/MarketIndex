@@ -161,6 +161,7 @@
   <div class="dm-label">Settings</div>
   <button onclick="toggleDark()"><span>🌙 Dark mode</span><span class="sm-badge off" id="sm-dark-val">Off</span></button>
   <button onclick="toggleHints()"><span>💡 Hints</span><span class="sm-badge" id="sm-hints-val">Shown</span></button>
+  <button onclick="openPaymentSettings()"><span>&#128179; Payment settings</span></button>
   <hr class="sm-sep">
   <button onclick="goToPicaMarket()"><span>🌐 PicaMarket</span></button>
 </div>
@@ -223,7 +224,7 @@
       <button class="btn success" style="padding:12px" onclick="setPayment('manual')">Paid manually (cash / EFT)</button>
       <button class="btn danger" style="padding:12px" onclick="setPayment('outstanding')">Mark as outstanding</button>
     </div>
-    <p style="font-size:11px;color:var(--text3);margin-top:1rem">Connect PayFast/Yoco credentials in Settings to enable automatic detection.</p>
+    <p style="font-size:11px;color:var(--text3);margin-top:1rem">Paid via PayFast / Yoco will auto-update when vendors pay via their emailed link.</p>
   </div>
 </div></div>
 
@@ -268,6 +269,15 @@
   <div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="closeModal('notes-modal')">Cancel</button><button class="btn primary" style="flex:1" onclick="saveNotes()">Save notes</button></div>
 </div></div>
 
+<div class="modal-overlay" id="payment-settings-modal"><div class="modal"><div class="modal-handle"></div>
+  <div class="modal-header"><h3>Payment settings</h3><button class="modal-close" onclick="closeModal('payment-settings-modal')">&#x2715;</button></div>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">Enter your PayFast merchant credentials. When you approve a vendor, they'll receive a payment link in their email that pays directly into your PayFast account.</p>
+  <div class="form-group"><label class="form-label">Merchant ID</label><input class="form-input" id="pf-merchant-id" type="text" placeholder="e.g. 10011914"><div style="font-size:11px;color:var(--text3);margin-top:4px">Found in your PayFast dashboard under Settings → Merchant Details</div></div>
+  <div class="form-group"><label class="form-label">Merchant Key</label><input class="form-input" id="pf-merchant-key" type="text" placeholder="e.g. q1cd2rdny4a53"><div style="font-size:11px;color:var(--text3);margin-top:4px">Found next to your Merchant ID in PayFast</div></div>
+  <div class="info-box blue" style="margin-bottom:1rem;font-size:12px">&#9432; Money goes directly into your PayFast account. PicaMarket takes no commission.</div>
+  <div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="closeModal('payment-settings-modal')">Cancel</button><button class="btn primary" style="flex:1;padding:12px" id="pf-save-btn" onclick="savePaymentSettings()">Save</button></div>
+</div></div>
+
 <div class="modal-overlay" id="reset-password-modal"><div class="modal"><div class="modal-handle"></div>
   <div class="modal-header"><h3>Set new password</h3></div>
   <div class="form-group"><label class="form-label">New password *</label><input class="form-input" id="reset-password-input" type="password" placeholder="At least 6 characters"></div>
@@ -278,6 +288,7 @@
 </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/blueimp-md5@2/js/md5.min.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

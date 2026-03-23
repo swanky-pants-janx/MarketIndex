@@ -1,0 +1,80 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { createHash } from 'node:crypto'
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
+Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
+
+  try {
+    const text = await req.text()
+    const params = new URLSearchParams(text)
+
+    // Build signature verification string — preserve received order, exclude signature
+    const parts: string[] = []
+    const data: Record<string, string> = {}
+    for (const [k, v] of params.entries()) {
+      data[k] = v
+      if (k !== 'signature') {
+        parts.push(`${k}=${encodeURIComponent(v.trim()).replace(/%20/g, '+')}`)
+      }
+    }
+
+    const computed = createHash('md5').update(parts.join('&')).digest('hex')
+    if (computed !== data['signature']) {
+      console.error('PayFast ITN: signature mismatch', computed, 'vs', data['signature'])
+      return new Response('Invalid signature', { status: 400 })
+    }
+
+    // Only process completed payments
+    if (data['payment_status'] !== 'COMPLETE') {
+      return new Response('OK', { status: 200 })
+    }
+
+    // m_payment_id = "vendorId:marketId"
+    const [vendorId, marketId] = (data['m_payment_id'] || '').split(':')
+    if (!vendorId || !marketId) {
+      console.error('PayFast ITN: bad m_payment_id', data['m_payment_id'])
+      return new Response('Bad payment ID', { status: 400 })
+    }
+
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    )
+
+    const { data: vendor, error } = await supabase
+      .from('vendors')
+      .select('market_payments, market_methods, markets')
+      .eq('id', vendorId)
+      .single()
+
+    if (error || !vendor) {
+      console.error('PayFast ITN: vendor not found', vendorId, error)
+      return new Response('Not found', { status: 404 })
+    }
+
+    const mp: Record<string, string> = { ...(vendor.market_payments || {}), [marketId]: 'paid' }
+    const mm: Record<string, string> = { ...(vendor.market_methods || {}), [marketId]: 'payfast' }
+    const markets: string[] = vendor.markets || []
+    const paidCount = markets.filter(m => mp[m] === 'paid').length
+    const payStatus = paidCount === markets.length ? 'paid' : paidCount > 0 ? 'partial' : 'outstanding'
+
+    await supabase.from('vendors').update({
+      market_payments: mp,
+      market_methods: mm,
+      pay_status: payStatus,
+      pay_method: payStatus === 'paid' ? 'payfast' : payStatus === 'partial' ? 'partial' : null,
+    }).eq('id', vendorId)
+
+    console.log('PayFast ITN: marked vendor', vendorId, 'market', marketId, 'as paid')
+    return new Response('OK', { status: 200 })
+
+  } catch (err) {
+    console.error('PayFast ITN error:', err)
+    return new Response('Server error', { status: 500 })
+  }
+})
