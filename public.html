@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Market Index</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  #loading{display:flex;align-items:center;justify-content:center;min-height:60vh;font-size:14px;color:var(--text2)}
+  #error{display:none;text-align:center;padding:3rem 1rem}
+  #error h2{color:var(--text);margin-bottom:0.5rem}
+  #error p{color:var(--text2);font-size:14px}
+  #content{display:none}
+  .pub-nav{background:var(--bg2);border-bottom:0.5px solid var(--border);padding:0 1rem;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+  .pub-nav-brand{font-size:16px;font-weight:600;color:var(--text)}
+  .pub-nav-sub{font-size:12px;color:var(--text2)}
+</style>
+</head>
+<body>
+
+<div id="loading">Loading...</div>
+
+<div id="error">
+  <h2>Market not found</h2>
+  <p id="error-msg">This market page doesn't exist or has been removed.</p>
+</div>
+
+<div id="content">
+  <div class="pub-nav">
+    <div>
+      <div class="pub-nav-brand" id="pub-title">Market Index</div>
+      <div class="pub-nav-sub">Vendor applications</div>
+    </div>
+  </div>
+
+  <div style="background:var(--bg2);min-height:calc(100vh - 52px)">
+    <div class="public-page">
+      <div class="public-banner">
+        <div class="public-banner-text">
+          <div style="font-size:20px;font-weight:500;color:var(--blue)" id="pub-title-2">Upcoming Markets</div>
+          <div style="font-size:13px;color:var(--text2);margin-top:4px">Browse and apply to attend as a vendor</div>
+        </div>
+      </div>
+
+      <div class="tabs-inner">
+        <div class="tab-inner active" onclick="pubTab('browse')">Browse markets</div>
+        <div class="tab-inner" onclick="pubTab('apply')">Apply as vendor</div>
+      </div>
+
+      <div id="pub-browse">
+        <div id="pub-markets-list"></div>
+        <div id="pub-markets-empty" class="empty-state" style="display:none">No markets published yet.</div>
+      </div>
+
+      <div id="pub-apply" style="display:none">
+        <div class="card">
+          <h3 style="margin-bottom:1rem">Vendor application</h3>
+          <div class="form-group"><label class="form-label">Stall / shop name *</label><input class="form-input" id="v-name" type="text" placeholder="e.g. Sunshine Bakes"></div>
+          <div class="form-group"><label class="form-label">Description of what you sell *</label><textarea class="form-input" id="v-desc" placeholder="Tell us about your stall..."></textarea></div>
+          <div class="form-group"><label class="form-label">Contact email *</label><input class="form-input" id="v-email" type="email" placeholder="you@example.com"></div>
+          <div class="form-group">
+            <label class="form-label">Select markets to attend *</label>
+            <div id="v-market-checks" style="margin-top:8px"></div>
+            <div id="v-no-markets" style="font-size:13px;color:var(--text2);display:none">No published markets available yet.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Photos of your stall / products</label>
+            <div class="upload-box"><input type="file" accept="image/*" multiple onchange="handleVendorImages(event)"><div>&#8679; Tap to add photos (max 4)</div></div>
+            <div id="vendor-img-thumbs" class="img-thumb-grid"></div>
+          </div>
+          <button class="btn primary" style="width:100%;margin-top:0.5rem;padding:12px" onclick="submitVendorForm()">Submit application</button>
+          <div id="v-success" style="display:none;margin-top:1rem;padding:12px;border-radius:8px;background:var(--green-bg);color:var(--green);font-size:13px;text-align:center;border:0.5px solid var(--green)">
+            Application submitted! You'll be notified by email if approved.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var _sb = window.supabase.createClient(
+  'https://bjzckhanxudkyrpczqbs.supabase.co',
+  'sb_publishable_f64M7MFa88zOMuZ083v-lw_Ypgcyhx-'
+);
+
+var coordinator = null;
+var markets = [];
+var _vendorImages = [];
+
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+async function init() {
+  var params = new URLSearchParams(window.location.search);
+  var slug = params.get('slug');
+  if (!slug) { showError('No market specified in the URL.'); return; }
+
+  var {data: profile} = await _sb.from('profiles').select('*').eq('slug', slug).maybeSingle();
+  if (!profile) { showError('This market page doesn\'t exist or has been removed.'); return; }
+  coordinator = profile;
+
+  var {data: mkts} = await _sb.from('markets').select('*').eq('user_id', profile.id).eq('published', true).order('created_at');
+  markets = mkts || [];
+
+  document.getElementById('pub-title').textContent = profile.market_name;
+  document.getElementById('pub-title-2').textContent = profile.market_name;
+  document.title = profile.market_name + ' — Market Index';
+
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('content').style.display = 'block';
+
+  renderMarkets();
+  renderVendorFormMarkets();
+}
+
+function showError(msg) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('error-msg').textContent = msg;
+  document.getElementById('error').style.display = 'block';
+}
+
+function renderMarkets() {
+  var el = document.getElementById('pub-markets-list');
+  var empty = document.getElementById('pub-markets-empty');
+  if (!markets.length) { el.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  el.innerHTML = markets.map(function(m) {
+    var dates = (m.dates||[]).map(function(d){return '<span class="date-chip">'+esc(d)+'</span>';}).join('');
+    var bi = m.banner ? '<img src="'+m.banner+'">' : esc(m.header||m.name);
+    return '<div class="market-card" style="margin-bottom:1rem"><div class="market-banner">'+bi+'</div><div class="market-body"><strong style="font-size:15px">'+esc(m.name)+'</strong><p style="font-size:13px;margin:6px 0 8px">'+esc(m.description||'')+'</p><div class="date-chips">'+dates+'</div></div><div class="market-footer"><span style="font-size:12px;color:var(--text2)">Stall fee: R'+(m.fee||350)+'/date</span><button class="btn small primary" onclick="pubTab(\'apply\')">Apply to attend</button></div></div>';
+  }).join('');
+}
+
+function renderVendorFormMarkets() {
+  var el = document.getElementById('v-market-checks');
+  var noM = document.getElementById('v-no-markets');
+  if (!markets.length) { el.innerHTML = ''; noM.style.display = 'block'; return; }
+  noM.style.display = 'none';
+  el.innerHTML = markets.map(function(m) {
+    return '<div class="market-select-card" onclick="toggleMktCheck(\''+m.id+'\',this)"><input type="checkbox" class="v-mkt-check" id="vc-'+m.id+'" value="'+m.id+'" onclick="event.stopPropagation();this.closest(\'.market-select-card\').classList.toggle(\'selected\',this.checked)"><div><div class="msc-name">'+esc(m.name)+'</div><div class="msc-dates">'+((m.dates||[]).join(' · ')||'Dates TBC')+'</div><div class="msc-fee">Stall fee: R'+(m.fee||350)+'/date</div></div></div>';
+  }).join('');
+}
+
+function pubTab(t) {
+  var tabs = document.querySelectorAll('.tab-inner');
+  tabs[0].classList.toggle('active', t==='browse');
+  tabs[1].classList.toggle('active', t==='apply');
+  document.getElementById('pub-browse').style.display = t==='browse'?'block':'none';
+  document.getElementById('pub-apply').style.display = t==='apply'?'block':'none';
+}
+
+function toggleMktCheck(id, card) {
+  var cb = document.getElementById('vc-'+id);
+  cb.checked = !cb.checked;
+  card.classList.toggle('selected', cb.checked);
+}
+
+function handleVendorImages(e) {
+  var files = Array.from(e.target.files).slice(0, 4-_vendorImages.length);
+  files.forEach(function(file) {
+    if (_vendorImages.length >= 4) return;
+    var r = new FileReader();
+    r.onload = function(ev) { _vendorImages.push(ev.target.result); renderVendorThumbs(); };
+    r.readAsDataURL(file);
+  });
+}
+
+function removeVendorImg(i) { _vendorImages.splice(i,1); renderVendorThumbs(); }
+
+function renderVendorThumbs() {
+  document.getElementById('vendor-img-thumbs').innerHTML = _vendorImages.map(function(src,i) {
+    return '<div class="img-thumb"><img src="'+src+'"><button class="img-thumb-remove" onclick="removeVendorImg('+i+')">&#x2715;</button></div>';
+  }).join('');
+}
+
+async function submitVendorForm() {
+  var name = document.getElementById('v-name').value.trim();
+  var desc = document.getElementById('v-desc').value.trim();
+  var email = document.getElementById('v-email').value.trim();
+  var selectedMarkets = Array.from(document.querySelectorAll('.v-mkt-check:checked')).map(function(c){return c.value;});
+  if (!name||!desc||!email) { alert('Please fill in all required fields.'); return; }
+  if (!selectedMarkets.length) { alert('Please select at least one market.'); return; }
+  if (!email.includes('@')) { alert('Please enter a valid email address.'); return; }
+
+  var btn = document.querySelector('#pub-apply .btn.primary');
+  btn.textContent = 'Submitting...'; btn.disabled = true;
+
+  var {error} = await _sb.from('vendors').insert({
+    id: crypto.randomUUID(),
+    user_id: coordinator.id,
+    name: name,
+    description: desc,
+    email: email,
+    markets: selectedMarkets,
+    market_payments: {},
+    market_methods: {},
+    status: 'pending',
+    pay_status: 'outstanding',
+    pay_method: null,
+    images: _vendorImages.slice(),
+    submitted_at: new Date().toLocaleDateString('en-ZA')
+  });
+
+  btn.textContent = 'Submit application'; btn.disabled = false;
+
+  if (error) { alert('Something went wrong. Please try again.'); console.error(error); return; }
+
+  document.getElementById('v-name').value='';
+  document.getElementById('v-desc').value='';
+  document.getElementById('v-email').value='';
+  _vendorImages=[]; renderVendorThumbs();
+  document.querySelectorAll('.v-mkt-check').forEach(function(c){c.checked=false;c.closest('.market-select-card').classList.remove('selected');});
+  var s = document.getElementById('v-success');
+  s.style.display='block'; setTimeout(function(){s.style.display='none';},5000);
+}
+
+init();
+</script>
+</body>
+</html>
