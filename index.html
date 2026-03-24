@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>PicaMarket</title>
 <link rel="stylesheet" href="styles.css">
+<style>
+  #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;white-space:nowrap}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
 </head>
 <body>
 
@@ -120,7 +124,6 @@
       <h2 style="margin:0">Markets</h2>
       <button class="btn primary" onclick="openMarketModal(null)">+ New market</button>
     </div>
-    <div id="public-link-banner" class="page-banner teal" style="margin-bottom:1.25rem"></div>
     <div id="markets-list"></div>
     <div id="markets-empty" class="empty-state" style="display:none">No markets yet. Create one to get started.</div>
   </div>
@@ -163,8 +166,12 @@
   <button onclick="toggleHints()"><span>💡 Hints</span><span class="sm-badge" id="sm-hints-val">Shown</span></button>
   <button onclick="openPaymentSettings()"><span>&#128179; Payment settings</span></button>
   <hr class="sm-sep">
-  <button onclick="goToPicaMarket()"><span>🌐 PicaMarket</span></button>
+  <button onclick="copyVendorLink()"><span>&#128279; Copy vendor page link</span></button>
+  <button onclick="openAccountSettings()"><span>&#128100; Account settings</span></button>
 </div>
+
+<!-- TOAST -->
+<div id="toast"></div>
 
 <!-- DOT MENU -->
 <div class="dot-menu-popup" id="dot-menu">
@@ -267,6 +274,16 @@
   <div class="modal-header"><h3>Market notes</h3><button class="modal-close" onclick="closeModal('notes-modal')">&#x2715;</button></div>
   <div class="form-group"><label class="form-label">Notes for this market</label><textarea class="form-input" id="notes-input" placeholder="e.g. Parking arranged, sound system booked..." style="min-height:140px"></textarea></div>
   <div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="closeModal('notes-modal')">Cancel</button><button class="btn primary" style="flex:1" onclick="saveNotes()">Save notes</button></div>
+</div></div>
+
+<div class="modal-overlay" id="account-modal"><div class="modal"><div class="modal-handle"></div>
+  <div class="modal-header"><h3>Account settings</h3><button class="modal-close" onclick="closeModal('account-modal')">&#x2715;</button></div>
+  <div class="form-group"><label class="form-label">Your name</label><input class="form-input" id="acc-name" type="text" placeholder="Your name"></div>
+  <div class="form-group"><label class="form-label">Market name</label><input class="form-input" id="acc-market" type="text" disabled style="opacity:0.5;cursor:not-allowed"><div style="font-size:11px;color:var(--text3);margin-top:4px">&#9888; Cannot be changed — it's tied to your public vendor page URL.</div></div>
+  <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="acc-email" type="text" disabled style="opacity:0.5;cursor:not-allowed"><div style="font-size:11px;color:var(--text3);margin-top:4px">To change your email, contact support.</div></div>
+  <div style="display:flex;gap:8px;margin-bottom:1rem"><button class="btn" style="flex:1" onclick="closeModal('account-modal')">Cancel</button><button class="btn primary" style="flex:1;padding:12px" id="acc-save-btn" onclick="saveAccountSettings()">Save</button></div>
+  <hr style="border:none;border-top:0.5px solid var(--border);margin:0.75rem 0">
+  <button class="btn" style="width:100%;font-size:13px" onclick="sendPasswordResetFromAccount()">&#128274; Change password</button>
 </div></div>
 
 <div class="modal-overlay" id="payment-settings-modal"><div class="modal"><div class="modal-handle"></div>
