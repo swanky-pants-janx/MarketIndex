@@ -16,7 +16,8 @@ function pfEncode(s){return encodeURIComponent(String(s).trim()).replace(/%20/g,
 function pfSignature(data){var parts=PF_FIELD_ORDER.filter(k=>data[k]!==undefined&&data[k]!==null&&data[k]!=='').map(k=>k+'='+pfEncode(data[k]));return md5(parts.join('&'));}
 var _pfSandbox=localStorage.getItem('pf_sandbox')==='1';
 function pfUrl(vendor,market){
-  var mid=currentUser.payfastMerchantId,mkey=currentUser.payfastMerchantKey;
+  var mid=_pfSandbox?'10000100':(currentUser.payfastMerchantId);
+  var mkey=_pfSandbox?'46f0cd694581a':(currentUser.payfastMerchantKey);
   if(!mid||!mkey)return null;
   var host=_pfSandbox?'sandbox.payfast.co.za':'www.payfast.co.za';
   var nameParts=vendor.name.split(' ');
