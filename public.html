@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>PicaMarket</title>
 <link rel="stylesheet" href="styles.css">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   #loading{display:flex;align-items:center;justify-content:center;min-height:60vh;font-size:14px;color:var(--text2)}
   #error{display:none;text-align:center;padding:3rem 1rem}
@@ -68,7 +69,10 @@
             <div class="upload-box"><input type="file" accept="image/*" multiple onchange="handleVendorImages(event)"><div>&#8679; Tap to add photos (max 4)</div></div>
             <div id="vendor-img-thumbs" class="img-thumb-grid"></div>
           </div>
-          <button class="btn primary" style="width:100%;margin-top:0.5rem;padding:12px" onclick="submitVendorForm()">Submit application</button>
+          <!-- honeypot: never visible to real users, bots fill it -->
+          <input type="text" id="hp-field" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none">
+          <div class="cf-turnstile" data-sitekey="PASTE_YOUR_TURNSTILE_SITE_KEY_HERE" data-theme="auto" style="margin-top:0.5rem"></div>
+          <button class="btn primary" style="width:100%;margin-top:0.75rem;padding:12px" onclick="submitVendorForm()">Submit application</button>
           <div id="v-success" style="display:none;margin-top:1rem;padding:12px;border-radius:8px;background:var(--green-bg);color:var(--green);font-size:13px;text-align:center;border:0.5px solid var(--green)">
             Application submitted! You'll be notified by email if approved.
           </div>
@@ -190,6 +194,9 @@ function renderVendorThumbs() {
 }
 
 async function submitVendorForm() {
+  // Honeypot check — bots fill hidden fields, humans don't
+  if (document.getElementById('hp-field').value) return;
+
   var name = document.getElementById('v-name').value.trim();
   var desc = document.getElementById('v-desc').value.trim();
   var email = document.getElementById('v-email').value.trim();
@@ -203,8 +210,25 @@ async function submitVendorForm() {
     marketStallTypes[mid] = sel ? sel.value : 'normal';
   });
 
+  // Turnstile verification
+  var tsToken = window.turnstile ? window.turnstile.getResponse() : null;
+  if (!tsToken) { alert('Please complete the security check before submitting.'); return; }
+
   var btn = document.querySelector('#pub-apply .btn.primary');
   btn.textContent = 'Submitting...'; btn.disabled = true;
+
+  var verifyRes = await fetch('https://bjzckhanxudkyrpczqbs.supabase.co/functions/v1/verify-turnstile', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json','Authorization':'Bearer sb_publishable_f64M7MFa88zOMuZ083v-lw_Ypgcyhx-'},
+    body: JSON.stringify({token: tsToken})
+  });
+  var verifyData = await verifyRes.json();
+  if (!verifyData.success) {
+    btn.textContent = 'Submit application'; btn.disabled = false;
+    alert('Security check failed. Please refresh the page and try again.');
+    if (window.turnstile) window.turnstile.reset();
+    return;
+  }
 
   var {error} = await _sb.from('vendors').insert({
     id: crypto.randomUUID(),
@@ -236,6 +260,7 @@ async function submitVendorForm() {
   document.getElementById('v-email').value='';
   _vendorImages=[]; renderVendorThumbs();
   document.querySelectorAll('.v-mkt-check').forEach(function(c){c.checked=false;c.closest('.market-select-card').classList.remove('selected');});
+  if (window.turnstile) window.turnstile.reset();
   var s = document.getElementById('v-success');
   s.style.display='block'; setTimeout(function(){s.style.display='none';},5000);
 }
