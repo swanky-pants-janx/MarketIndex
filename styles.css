@@ -49,6 +49,11 @@ body.dark{--bg:#1c1c1a;--bg2:#131310;--bg3:#252520;--border:rgba(255,255,255,0.0
 .sidebar-item:hover{color:var(--text);background:var(--bg3)}
 .sidebar-item.active{color:var(--text)}
 .sidebar-item svg{width:20px;height:20px;min-width:20px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sidebar-item span{opacity:0;transition:opacity 0.15s}
+.sidebar:hover .sidebar-item span{opacity:1}
+.sidebar-spacer{flex:1}
+.sidebar-divider{height:1px;background:var(--border);margin:0 12px;flex-shrink:0}
+.sidebar-logout:hover{color:var(--red)!important;background:var(--red-bg)!important}
 
 /* ── BOTTOM NAV ────────────────────────────────────────────────── */
 .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bottom-h);background:var(--bg);border-top:1px solid var(--border);z-index:100;align-items:stretch}
@@ -235,6 +240,7 @@ select.form-input{font-size:14px}
 @media(min-width:768px){
   .nav-mobile-right{display:none}
   .nav-tabs{display:none}
+  .nav-settings-btn,.nav-logout-btn{display:none}
   .sidebar{display:flex}
   .dashboard-main{margin-left:56px}
   .desktop-table{display:table}
