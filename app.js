@@ -12,7 +12,7 @@ function sendEmail(to,subject,html){fetch('https://bjzckhanxudkyrpczqbs.supabase
 
 // ── PAYFAST ───────────────────────────────────────────────────────
 var PF_FIELD_ORDER=['merchant_id','merchant_key','return_url','cancel_url','notify_url','name_first','name_last','email_address','cell_number','m_payment_id','amount','item_name','item_description','custom_str1','custom_str2','custom_str3','custom_str4','custom_str5','email_confirmation','confirmation_address','currency','payment_method'];
-function pfEncode(s){return encodeURIComponent(String(s).trim()).replace(/%20/g,'+');}
+function pfEncode(s){return encodeURIComponent(String(s).trim()).replace(/%20/g,'+').replace(/!/g,'%21').replace(/'/g,'%27').replace(/\(/g,'%28').replace(/\)/g,'%29').replace(/\*/g,'%2A').replace(/~/g,'%7E');}
 function pfSignature(data){var parts=PF_FIELD_ORDER.filter(k=>data[k]!==undefined&&data[k]!==null&&data[k]!=='').map(k=>k+'='+pfEncode(data[k]));return md5(parts.join('&'));}
 var _pfSandbox=localStorage.getItem('pf_sandbox')==='1';
 function pfUrl(vendor,market){
