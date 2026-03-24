@@ -86,6 +86,7 @@
       <div class="toolbar">
         <label style="display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer;color:var(--text);flex-shrink:0"><input type="checkbox" id="check-all" onchange="toggleAll(this)"> Select all</label>
         <input class="search-input" type="text" placeholder="Search vendors..." oninput="renderPending(this.value)">
+        <button class="btn small" id="refresh-btn" onclick="refreshPending()" style="flex-shrink:0">&#8635; Refresh</button>
       </div>
       <table class="vendor-table desktop-table"><thead><tr><th style="width:36px"></th><th>Stall name</th><th>Description</th><th>Markets</th><th>Submitted</th><th>Status</th></tr></thead><tbody id="pending-tbody"></tbody></table>
       <div class="mobile-cards" id="pending-cards"></div>

@@ -89,6 +89,7 @@ function getStallType(v,m){var types=m&&m.stallTypes&&m.stallTypes.length?m.stal
 function getStallFee(v,m){return getStallType(v,m).fee||FEE;}
 function stallTypeLabel(v,m){return getStallType(v,m).name||'Normal stall';}
 function stallTypeBadge(v,m){var t=getStallType(v,m);var c=t.color||'#6b7280';return'<span class="badge" style="background:'+c+'22;color:'+c+'">'+esc(t.name)+'</span>';}
+async function refreshPending(){var btn=document.getElementById('refresh-btn');if(btn){btn.textContent='↻ Loading...';btn.disabled=true;}await loadUserData();renderPending();updateMetrics();if(btn){btn.textContent='↻ Refresh';btn.disabled=false;}}
 async function loadUserData(){var[{data:mkts},{data:vnds}]=await Promise.all([_sb.from('markets').select('*').eq('user_id',currentUser.id).order('created_at'),_sb.from('vendors').select('*').eq('user_id',currentUser.id).order('created_at')]);state.markets=(mkts||[]).map(dbToMarket);state.vendors=(vnds||[]).map(dbToVendor);}
 function sbSave(table,obj){_sb.from(table).upsert(obj).then(({error})=>{if(error)console.error('DB save error:',error);});}
 function sbDel(table,id){_sb.from(table).delete().eq('id',id).then(({error})=>{if(error)console.error('DB delete error:',error);});}
