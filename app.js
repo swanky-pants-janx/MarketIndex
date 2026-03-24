@@ -14,59 +14,43 @@ function sendEmail(to,subject,html){fetch('https://bjzckhanxudkyrpczqbs.supabase
 var PF_FIELD_ORDER=['merchant_id','merchant_key','return_url','cancel_url','notify_url','name_first','name_last','email_address','cell_number','m_payment_id','amount','item_name','item_description','custom_str1','custom_str2','custom_str3','custom_str4','custom_str5','email_confirmation','confirmation_address','currency','payment_method'];
 function pfEncode(s){return encodeURIComponent(String(s).trim()).replace(/%20/g,'+').replace(/!/g,'%21').replace(/'/g,'%27').replace(/\(/g,'%28').replace(/\)/g,'%29').replace(/\*/g,'%2A').replace(/~/g,'%7E');}
 function pfSignature(data){var parts=PF_FIELD_ORDER.filter(k=>data[k]!==undefined&&data[k]!==null&&data[k]!=='').map(k=>k+'='+pfEncode(data[k]));return md5(parts.join('&'));}
-var _pfSandbox=localStorage.getItem('pf_sandbox')==='1';
 function pfUrl(vendor,market){
-  var mid=_pfSandbox?'10000100':(currentUser.payfastMerchantId);
-  var mkey=_pfSandbox?'46f0cd694581a':(currentUser.payfastMerchantKey);
+  var mid=currentUser.payfastMerchantId,mkey=currentUser.payfastMerchantKey;
   if(!mid||!mkey)return null;
-  var host=_pfSandbox?'sandbox.payfast.co.za':'www.payfast.co.za';
   var nameParts=vendor.name.split(' ');
   var data={merchant_id:mid,merchant_key:mkey,return_url:'https://picamarket.site/',cancel_url:'https://picamarket.site/',notify_url:'https://bjzckhanxudkyrpczqbs.supabase.co/functions/v1/payfast-itn',name_first:nameParts[0],name_last:nameParts.slice(1).join(' ')||'-',email_address:vendor.email,m_payment_id:vendor.id+':'+market.id,amount:(market.fee||FEE).toFixed(2),item_name:(market.name+' stall fee').substring(0,100)};
   data.signature=pfSignature(data);
   var q=new URLSearchParams();
   PF_FIELD_ORDER.forEach(k=>{if(data[k]!==undefined&&data[k]!==null&&data[k]!=='')q.set(k,data[k]);});
   q.set('signature',data.signature);
-  return'https://'+host+'/eng/process?'+q.toString();
-}
-function onSandboxToggle(){
-  var on=document.getElementById('pf-sandbox').checked;
-  document.getElementById('pf-sandbox-creds').style.display=on?'block':'none';
-  if(on){document.getElementById('pf-merchant-id').value='10000100';document.getElementById('pf-merchant-key').value='46f0cd694581a';}
-  else{document.getElementById('pf-merchant-id').value=currentUser.payfastMerchantId||'';document.getElementById('pf-merchant-key').value=currentUser.payfastMerchantKey||'';}
+  return'https://www.payfast.co.za/eng/process?'+q.toString();
 }
 async function openPaymentSettings(){
-  var sandbox=_pfSandbox;
-  document.getElementById('pf-sandbox').checked=sandbox;
-  document.getElementById('pf-sandbox-creds').style.display=sandbox?'block':'none';
-  document.getElementById('pf-merchant-id').value=sandbox?'10000100':(currentUser.payfastMerchantId||'');
-  document.getElementById('pf-merchant-key').value=sandbox?'46f0cd694581a':(currentUser.payfastMerchantKey||'');
+  document.getElementById('pf-merchant-id').value=currentUser.payfastMerchantId||'';
+  document.getElementById('pf-merchant-key').value=currentUser.payfastMerchantKey||'';
   document.getElementById('payment-settings-modal').classList.add('open');
   document.getElementById('settings-menu').style.display='none';
 }
 async function savePaymentSettings(){
-  var sandbox=document.getElementById('pf-sandbox').checked;
-  var mid=sandbox?currentUser.payfastMerchantId:(document.getElementById('pf-merchant-id').value.trim());
-  var mkey=sandbox?currentUser.payfastMerchantKey:(document.getElementById('pf-merchant-key').value.trim());
+  var mid=document.getElementById('pf-merchant-id').value.trim();
+  var mkey=document.getElementById('pf-merchant-key').value.trim();
   var btn=document.getElementById('pf-save-btn');
-  if(!sandbox){
-    btn.textContent='Saving...';btn.disabled=true;
-    var{error}=await _sb.from('profiles').update({payfast_merchant_id:mid,payfast_merchant_key:mkey}).eq('id',currentUser.id);
-    btn.textContent='Save';btn.disabled=false;
-    if(error){alert('Failed to save. Try again.');return;}
-    currentUser.payfastMerchantId=mid||null;
-    currentUser.payfastMerchantKey=mkey||null;
-  }
-  _pfSandbox=sandbox;
-  localStorage.setItem('pf_sandbox',sandbox?'1':'0');
+  btn.textContent='Saving...';btn.disabled=true;
+  var{error}=await _sb.from('profiles').update({payfast_merchant_id:mid,payfast_merchant_key:mkey}).eq('id',currentUser.id);
+  btn.textContent='Save';btn.disabled=false;
+  if(error){alert('Failed to save. Try again.');return;}
+  currentUser.payfastMerchantId=mid||null;
+  currentUser.payfastMerchantKey=mkey||null;
   closeModal('payment-settings-modal');
 }
 
 // ── HELPERS ──────────────────────────────────────────────────────
 var darkMode=false;
-function toggleDark(){darkMode=!darkMode;document.body.classList.toggle('dark',darkMode);syncSettingsMenu();}
+function saveUserSettings(){if(!currentUser)return;_sb.from('profiles').update({settings:{dark_mode:darkMode,hide_hints:state.hideHints}}).eq('id',currentUser.id).then(({error})=>{if(error)console.error('Settings save error:',error);});}
+function toggleDark(){darkMode=!darkMode;document.body.classList.toggle('dark',darkMode);syncSettingsMenu();saveUserSettings();}
 function openSettingsMenu(e){e.stopPropagation();var menu=document.getElementById('settings-menu');if(menu.style.display==='block'){menu.style.display='none';return;}syncSettingsMenu();menu.style.display='block';var rect=e.currentTarget.getBoundingClientRect();var top=rect.bottom+6,left=Math.max(8,rect.right-220);if(top+180>window.innerHeight)top=rect.top-190;menu.style.top=top+'px';menu.style.left=left+'px';}
 function syncSettingsMenu(){var dv=document.getElementById('sm-dark-val');if(dv){dv.textContent=darkMode?'On':'Off';dv.className=darkMode?'sm-badge':'sm-badge off';}var hv=document.getElementById('sm-hints-val');if(hv){hv.textContent=state.hideHints?'Hidden':'Shown';hv.className=state.hideHints?'sm-badge off':'sm-badge';}}
-function toggleHints(){state.hideHints=!state.hideHints;document.querySelectorAll('.page-banner').forEach(el=>el.style.display=state.hideHints?'none':'');syncSettingsMenu();}
+function toggleHints(){state.hideHints=!state.hideHints;document.querySelectorAll('.page-banner').forEach(el=>el.style.display=state.hideHints?'none':'');syncSettingsMenu();saveUserSettings();}
 function goToMarketIndex(){document.getElementById('settings-menu').style.display='none';showPage('public');}
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
 function uid(){return crypto.randomUUID();}
@@ -81,7 +65,7 @@ function showAuthSuccess(m){var e=document.getElementById('auth-success');e.text
 function clearAuthMsg(){document.getElementById('auth-error').style.display='none';document.getElementById('auth-success').style.display='none';}
 async function doLogin(){var email=document.getElementById('login-email').value.trim().toLowerCase();var pass=document.getElementById('login-password').value;if(!email||!pass){showAuthError('Please fill in all fields.');return;}var{data,error}=await _sb.auth.signInWithPassword({email,password:pass});if(error){showAuthError('Incorrect email or password.');return;}var{data:profile}=await _sb.from('profiles').select('*').eq('id',data.user.id).single();if(!profile){showAuthError('Account has no profile. Please contact support.');return;}loginAs(data.user,profile);}
 async function doRegister(){var market=document.getElementById('reg-market').value.trim();var name=document.getElementById('reg-name').value.trim();var email=document.getElementById('reg-email').value.trim().toLowerCase();var pass=document.getElementById('reg-password').value;var confirm=document.getElementById('reg-confirm').value;if(!market||!name||!email||!pass||!confirm){showAuthError('Please fill in all fields.');return;}if(!email.includes('@')){showAuthError('Please enter a valid email.');return;}if(pass.length<6){showAuthError('Password must be at least 6 characters.');return;}if(pass!==confirm){showAuthError('Passwords do not match.');return;}var{data:existing}=await _sb.from('profiles').select('id').eq('market_name',market).maybeSingle();if(existing){showAuthError('That market name is already taken. Please choose a different name.');return;}var{data,error}=await _sb.auth.signUp({email,password:pass});if(error){showAuthError(error.message);return;}var slug=makeSlug(market);var{error:pErr}=await _sb.from('profiles').insert({id:data.user.id,market_name:market,coordinator_name:name,slug,coordinator_email:email});if(pErr){showAuthError('Account created but profile failed to save. Please try logging in.');return;}showAuthSuccess('Account created! Logging you in...');setTimeout(()=>loginAs(data.user,{market_name:market,coordinator_name:name,slug}),800);}
-async function loginAs(user,profile){currentUser={...user,market:profile.market_name,name:profile.coordinator_name,slug:profile.slug,payfastMerchantId:profile.payfast_merchant_id||null,payfastMerchantKey:profile.payfast_merchant_key||null};state.vendors=[];state.markets=[];state.expandedRows={};state.approvedToday=0;state.filterPayment='';document.getElementById('auth-screen').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('nav-brand').innerHTML='<span>'+esc(profile.market_name)+'</span> &ndash; Dashboard';document.getElementById('nav-user').textContent=profile.coordinator_name;document.getElementById('pub-title').textContent=profile.market_name;await loadUserData();renderPublicLinkBanner();renderPending();updateMetrics();}
+async function loginAs(user,profile){currentUser={...user,market:profile.market_name,name:profile.coordinator_name,slug:profile.slug,payfastMerchantId:profile.payfast_merchant_id||null,payfastMerchantKey:profile.payfast_merchant_key||null};state.vendors=[];state.markets=[];state.expandedRows={};state.approvedToday=0;state.filterPayment='';var saved=profile.settings||{};darkMode=!!saved.dark_mode;state.hideHints=!!saved.hide_hints;document.body.classList.toggle('dark',darkMode);document.getElementById('auth-screen').style.display='none';document.getElementById('dashboard').style.display='block';document.getElementById('nav-brand').innerHTML='<span>'+esc(profile.market_name)+'</span> &ndash; Dashboard';document.getElementById('nav-user').textContent=profile.coordinator_name;document.getElementById('pub-title').textContent=profile.market_name;await loadUserData();renderPublicLinkBanner();renderPending();updateMetrics();}
 async function doLogout(){await _sb.auth.signOut();currentUser=null;document.getElementById('dashboard').style.display='none';document.getElementById('auth-screen').style.display='flex';document.getElementById('login-email').value='';document.getElementById('login-password').value='';clearAuthMsg();switchAuthTab('login');}
 async function doForgotPassword(){var email=document.getElementById('forgot-email').value.trim().toLowerCase();if(!email){showAuthError('Please enter your email.');return;}var{error}=await _sb.auth.resetPasswordForEmail(email,{redirectTo:'https://picamarket.site/'});if(error){showAuthError(error.message);return;}showAuthSuccess('Reset link sent! Check your inbox.');}
 async function doResetPassword(){var pass=document.getElementById('reset-password-input').value;var confirm=document.getElementById('reset-password-confirm').value;var re=document.getElementById('reset-error'),rs=document.getElementById('reset-success');re.style.display='none';rs.style.display='none';if(!pass||!confirm){re.textContent='Please fill in both fields.';re.style.display='block';return;}if(pass.length<6){re.textContent='Password must be at least 6 characters.';re.style.display='block';return;}if(pass!==confirm){re.textContent='Passwords do not match.';re.style.display='block';return;}var{error}=await _sb.auth.updateUser({password:pass});if(error){re.textContent=error.message;re.style.display='block';return;}rs.textContent='Password updated! You can now log in.';rs.style.display='block';setTimeout(()=>{document.getElementById('reset-password-modal').classList.remove('open');},2000);}
