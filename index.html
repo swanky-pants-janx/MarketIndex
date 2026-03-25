@@ -18,6 +18,10 @@
   .modal-market .form-label{font-size:14px;margin-bottom:8px}
   .modal-market .form-input{padding:11px 14px}
   @media(max-width:767px){.modal-market{padding:1.5rem!important}}
+  .mf-page-body{max-width:780px}
+  .mf-page-body .form-group{margin-bottom:1.25rem}
+  .mf-page-body .form-label{font-size:14px;margin-bottom:8px}
+  .mf-page-body .form-input{padding:11px 14px}
   @media(max-width:540px){.mf-row{grid-template-columns:1fr}}
 </style>
 </head>
@@ -207,6 +211,32 @@
   <div id="page-market-dash" class="page">
     <button class="back-btn" onclick="showPage('markets')">&#8592; Back to Markets</button>
     <div id="mdb-content"></div>
+  </div>
+
+  <div id="page-market-form" class="page">
+    <button class="back-btn" onclick="showPage('markets')">&#8592; Back to Markets</button>
+    <div class="mf-page-body">
+    <h2 id="market-form-title" style="margin-bottom:1.5rem">New market</h2>
+
+    <div class="mf-section-label">Basics</div>
+    <div class="mf-row" style="grid-template-columns:1fr 120px">
+      <div class="form-group"><label class="form-label">Market name *</label><input class="form-input" id="m-name" type="text" placeholder="e.g. Centurion Night Market"></div>
+      <div class="form-group"><label class="form-label">Max stalls</label><input class="form-input" id="m-capacity" type="number" value="30" min="1" inputmode="numeric"></div>
+    </div>
+    <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="m-desc" placeholder="Describe this market..."></textarea></div>
+
+    <div class="mf-section-label">Appearance</div>
+    <div class="form-group"><label class="form-label">Banner image</label><div class="upload-box"><input type="file" accept="image/*" onchange="handleBannerUpload(event)"><div id="banner-upload-prompt">&#8679; Click or tap to upload a banner image</div><img id="banner-preview" style="display:none" class="upload-preview"></div><button class="btn small danger" id="banner-remove-btn" style="margin-top:6px;display:none" onclick="removeBanner()">Remove banner</button><div style="font-size:11px;color:var(--text3);margin-top:6px">&#9432; Recommended: 1200 &times; 400px (3:1 ratio), JPG or PNG. Keep content centred.</div></div>
+    <div class="form-group"><label class="form-label">Header text <span style="font-weight:400;color:var(--text3);font-size:11px">&#8212; shown when no banner is uploaded</span></label><input class="form-input" id="m-header" type="text" placeholder="Short banner header"></div>
+
+    <div class="mf-section-label">Pricing</div>
+    <div class="form-group"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><label class="form-label" style="margin:0">Stall types</label><button type="button" class="btn small" onclick="addStallType()">+ Add type</button></div><div id="stall-type-list"></div></div>
+
+    <div class="mf-section-label">Schedule</div>
+    <div class="form-group"><label class="form-label">Market dates</label><div style="display:flex;gap:8px"><input class="form-input" id="m-date-pick" type="date" style="flex:1"><button class="btn" onclick="addDate()">+ Add</button></div><div id="m-date-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div></div>
+
+    <div style="display:flex;gap:8px;margin-top:1.25rem"><button class="btn" style="flex:1" onclick="showPage('markets')">Cancel</button><button class="btn primary" style="flex:1;padding:12px" onclick="saveMarket()">Save market</button></div>
+    </div>
   </div>
 
   <div id="page-form-builder" class="page">
@@ -437,28 +467,6 @@
   <div style="display:flex;gap:8px"><button class="btn" style="flex:1" onclick="closeModal('credit-modal')">Cancel</button><button class="btn primary" style="flex:1" onclick="confirmCredit()">Confirm credit</button></div>
 </div></div>
 
-<div class="modal-overlay" id="market-modal"><div class="modal modal-market"><div class="modal-handle"></div>
-  <div class="modal-header"><h3 id="market-modal-title">New market</h3><button class="modal-close" onclick="closeModal('market-modal')">&#x2715;</button></div>
-
-  <div class="mf-section-label">Basics</div>
-  <div class="mf-row" style="grid-template-columns:1fr 120px">
-    <div class="form-group"><label class="form-label">Market name *</label><input class="form-input" id="m-name" type="text" placeholder="e.g. Centurion Night Market"></div>
-    <div class="form-group"><label class="form-label">Max stalls</label><input class="form-input" id="m-capacity" type="number" value="30" min="1" inputmode="numeric"></div>
-  </div>
-  <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" id="m-desc" placeholder="Describe this market..."></textarea></div>
-
-  <div class="mf-section-label">Appearance</div>
-  <div class="form-group"><label class="form-label">Banner image</label><div class="upload-box"><input type="file" accept="image/*" onchange="handleBannerUpload(event)"><div id="banner-upload-prompt">&#8679; Click or tap to upload a banner image</div><img id="banner-preview" style="display:none" class="upload-preview"></div><button class="btn small danger" id="banner-remove-btn" style="margin-top:6px;display:none" onclick="removeBanner()">Remove banner</button><div style="font-size:11px;color:var(--text3);margin-top:6px">&#9432; Recommended: 1200 × 400px (3:1 ratio), JPG or PNG. Keep content centred.</div></div>
-  <div class="form-group"><label class="form-label">Header text <span style="font-weight:400;color:var(--text3);font-size:11px">— shown when no banner is uploaded</span></label><input class="form-input" id="m-header" type="text" placeholder="Short banner header"></div>
-
-  <div class="mf-section-label">Pricing</div>
-  <div class="form-group"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><label class="form-label" style="margin:0">Stall types</label><button type="button" class="btn small" onclick="addStallType()">+ Add type</button></div><div id="stall-type-list"></div></div>
-
-  <div class="mf-section-label">Schedule</div>
-  <div class="form-group"><label class="form-label">Market dates</label><div style="display:flex;gap:8px"><input class="form-input" id="m-date-pick" type="date" style="flex:1"><button class="btn" onclick="addDate()">+ Add</button></div><div id="m-date-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div></div>
-
-  <div style="display:flex;gap:8px;margin-top:1.25rem"><button class="btn" style="flex:1" onclick="closeModal('market-modal')">Cancel</button><button class="btn primary" style="flex:1;padding:12px" onclick="saveMarket()">Save market</button></div>
-</div></div>
 
 <div class="modal-overlay" id="notes-modal"><div class="modal"><div class="modal-handle"></div>
   <div class="modal-header"><h3>Market notes</h3><button class="modal-close" onclick="closeModal('notes-modal')">&#x2715;</button></div>
