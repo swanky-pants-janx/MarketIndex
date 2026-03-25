@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>PicaMarket</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="icon" href="Logo.png">
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <style>
   #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--text);color:var(--bg);padding:10px 20px;border-radius:20px;font-size:13px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;white-space:nowrap}
@@ -29,7 +30,7 @@
 
 <div id="auth-screen" class="auth-wrap">
   <div class="auth-card">
-    <div class="auth-logo">PicaMarket</div>
+    <img src="Logo.png" alt="PicaMarket" style="height:52px;margin-bottom:0.5rem;display:block">
     <div class="auth-sub">Market runner dashboard</div>
     <div class="auth-tabs">
       <div class="auth-tab active" onclick="switchAuthTab('login')">Log in</div>
@@ -63,6 +64,7 @@
 
 <div id="dashboard" style="display:none">
   <nav class="nav">
+    <img src="Logo.png" alt="PicaMarket" style="height:30px;margin-right:10px;flex-shrink:0;cursor:pointer" onclick="showPage('home')">
     <span class="nav-brand" id="nav-brand">PicaMarket</span>
     <div class="nav-bell-area">
       <button class="nav-bell-btn" onclick="showPage('approval')" title="Vendor applications">
