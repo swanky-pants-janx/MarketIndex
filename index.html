@@ -75,7 +75,7 @@
     </div>
     <div class="nav-right">
       <span class="nav-user" id="nav-user"></span>
-      <button class="dark-toggle nav-settings-btn" onclick="openSettingsMenu(event)">&#9776; Settings</button>
+      <button class="dark-toggle nav-settings-btn" onclick="showPage('settings')">&#9776; Settings</button>
       <button class="nav-logout nav-logout-btn" onclick="openModal('logout-confirm-modal')">Log out</button>
     </div>
     <div class="nav-mobile-right">
@@ -83,7 +83,7 @@
         <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
         <span class="nav-bell-badge" style="display:none">0</span>
       </button>
-      <button class="dark-toggle" onclick="openSettingsMenu(event)">&#9776;</button>
+      <button class="dark-toggle" onclick="showPage('settings')">&#9776;</button>
       <button class="nav-logout" onclick="openModal('logout-confirm-modal')">Log out</button>
     </div>
   </nav>
@@ -104,7 +104,7 @@
     <div class="sidebar-spacer"></div>
     <div class="sidebar-user" id="sidebar-user"></div>
     <div class="sidebar-divider"></div>
-    <button class="sidebar-item" onclick="openSettingsMenu(event)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></button>
+    <button class="sidebar-item" onclick="showPage('settings')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></button>
     <button class="sidebar-item sidebar-logout" onclick="openModal('logout-confirm-modal')"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg><span>Log out</span></button>
   </aside>
 
@@ -239,6 +239,69 @@
       </div>
     </div></div>
   </div>
+
+  <div id="page-settings" class="page">
+    <h2 style="margin-bottom:1.5rem">Settings</h2>
+    <div class="settings-layout">
+      <aside class="settings-nav">
+        <div class="settings-nav-group">
+          <span class="settings-nav-label">Configuration</span>
+          <button class="settings-nav-item active" id="snav-appearance" onclick="showSettingsSec('appearance')">Appearance</button>
+        </div>
+        <div class="settings-nav-group">
+          <span class="settings-nav-label">Market</span>
+          <button class="settings-nav-item" id="snav-payment" onclick="showSettingsSec('payment')">Payment settings</button>
+          <button class="settings-nav-item" id="snav-email" onclick="showSettingsSec('email')">Email templates</button>
+        </div>
+        <div class="settings-nav-group">
+          <span class="settings-nav-label">Vendors</span>
+          <button class="settings-nav-item" id="snav-blocked" onclick="showSettingsSec('blocked')">Blocked vendors</button>
+        </div>
+        <div class="settings-nav-group">
+          <span class="settings-nav-label">Account</span>
+          <button class="settings-nav-item" id="snav-account" onclick="showSettingsSec('account')">Account settings</button>
+        </div>
+      </aside>
+      <div class="settings-body">
+        <div class="settings-sec active" id="ssec-appearance">
+          <h3 class="settings-sec-title">Appearance</h3>
+          <p class="settings-sec-desc">Customise the look and feel of your dashboard</p>
+          <div class="settings-row">
+            <div><div class="settings-row-title">Dark mode</div><div class="settings-row-sub">Switch between light and dark theme</div></div>
+            <span class="sm-badge off" id="sp-dark-val" onclick="toggleDark()" style="cursor:pointer;user-select:none">Off</span>
+          </div>
+          <div class="settings-row">
+            <div><div class="settings-row-title">Page hints</div><div class="settings-row-sub">Show or hide the descriptive hint banners on each page</div></div>
+            <span class="sm-badge" id="sp-hints-val" onclick="toggleHints()" style="cursor:pointer;user-select:none">Shown</span>
+          </div>
+        </div>
+        <div class="settings-sec" id="ssec-payment">
+          <h3 class="settings-sec-title">Payment settings</h3>
+          <p class="settings-sec-desc">Configure your PayFast integration and bank details used for vendor payment links and EFT payments</p>
+          <button class="btn" onclick="openPaymentSettings()">Edit payment settings</button>
+        </div>
+        <div class="settings-sec" id="ssec-email">
+          <h3 class="settings-sec-title">Email templates</h3>
+          <p class="settings-sec-desc">Customise the intro text sent in vendor approval and payment reminder emails</p>
+          <button class="btn" onclick="openEmailTemplates()">Edit email templates</button>
+        </div>
+        <div class="settings-sec" id="ssec-blocked">
+          <h3 class="settings-sec-title">Blocked vendors</h3>
+          <p class="settings-sec-desc">Manage the list of email addresses that are prevented from submitting vendor applications to your market</p>
+          <button class="btn" onclick="openBlockedVendors()">Manage blocked vendors</button>
+        </div>
+        <div class="settings-sec" id="ssec-account">
+          <h3 class="settings-sec-title">Account settings</h3>
+          <p class="settings-sec-desc">Update your name, market name, email notification preferences, and password. Use the link below to share your vendor application page</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn" onclick="openAccountSettings()">Edit account settings</button>
+            <button class="btn" onclick="copyVendorLink()">&#128279; Copy vendor page link</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
 </div>
 

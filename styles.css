@@ -45,6 +45,23 @@ body.dark{--bg:#1c1c1a;--bg2:#131310;--bg3:#252520;--border:rgba(255,255,255,0.0
 .settings-menu button{display:flex;align-items:center;justify-content:space-between;width:100%;padding:12px 20px;background:none;border:none;cursor:pointer;font-size:14px;color:var(--text);text-align:left;gap:16px;transition:background 0.1s;font-family:inherit}
 .settings-menu button:hover{background:var(--bg3)}
 .settings-menu .sm-sep{border:none;border-top:1px solid var(--border);margin:4px 0}
+/* ── SETTINGS PAGE ─────────────────────────────────────────────── */
+.settings-layout{display:flex;gap:0;align-items:flex-start}
+.settings-nav{width:190px;min-width:190px;padding:0.25rem 0;flex-shrink:0}
+.settings-nav-group{margin-bottom:1.25rem}
+.settings-nav-label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--text3);padding:0 0.75rem 0.5rem;display:block}
+.settings-nav-item{display:block;width:100%;text-align:left;background:none;border:none;cursor:pointer;font-size:13px;color:var(--text2);padding:7px 0.75rem;border-radius:8px;font-family:inherit;transition:color 0.15s,background 0.15s}
+.settings-nav-item:hover{color:var(--text);background:var(--bg3)}
+.settings-nav-item.active{color:var(--text);background:var(--bg3);font-weight:500}
+.settings-body{flex:1;padding:0 0 1rem 2rem;border-left:1px solid var(--border);min-width:0}
+.settings-sec{display:none}
+.settings-sec.active{display:block}
+.settings-sec-title{font-size:18px;font-weight:600;letter-spacing:-0.02em;color:var(--text);margin-bottom:0.35rem}
+.settings-sec-desc{font-size:13px;color:var(--text2);margin-bottom:1.5rem;line-height:1.6;border-bottom:1px solid var(--border);padding-bottom:1.25rem}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);gap:1rem}
+.settings-row-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:3px}
+.settings-row-sub{font-size:12px;color:var(--text2)}
+@media(max-width:640px){.settings-layout{flex-direction:column}.settings-nav{width:100%;padding:0 0 0.5rem;border-bottom:1px solid var(--border);margin-bottom:1.25rem;display:flex;flex-wrap:wrap;gap:4px}.settings-nav-group{margin-bottom:0.5rem}.settings-nav-label{display:none}.settings-body{padding:0;border-left:none}}
 /* ── FORM BUILDER ───────────────────────────────────────────────── */
 .fb-field-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:0.5px solid var(--border);flex-wrap:wrap}
 .fb-field-card:last-child{border-bottom:none}
