@@ -6,10 +6,36 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
+// PayFast production IP ranges (https://developers.payfast.co.za/docs#step_4_confirm_payment)
+const PAYFAST_CIDRS = [
+  ['197.97.145.144', 28],
+  ['41.74.179.192', 27],
+] as const
+
+function ipToInt(ip: string): number {
+  return ip.split('.').reduce((acc, oct) => (acc << 8) | parseInt(oct), 0) >>> 0
+}
+
+function inCidr(ip: string, [base, bits]: readonly [string, number]): boolean {
+  const mask = bits === 0 ? 0 : (~0 << (32 - bits)) >>> 0
+  return (ipToInt(ip) & mask) === (ipToInt(base) & mask)
+}
+
+function isPayFastIp(ip: string): boolean {
+  return PAYFAST_CIDRS.some(cidr => inCidr(ip, cidr))
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders })
 
   try {
+    // Verify request comes from PayFast IP ranges
+    const clientIp = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || ''
+    if (!isPayFastIp(clientIp)) {
+      console.error('PayFast ITN: rejected IP', clientIp)
+      return new Response('Forbidden', { status: 403 })
+    }
+
     const text = await req.text()
     const params = new URLSearchParams(text)
 
@@ -21,6 +47,12 @@ Deno.serve(async (req) => {
       if (k !== 'signature') {
         parts.push(`${k}=${encodeURIComponent(v.trim()).replace(/%20/g, '+')}`)
       }
+    }
+
+    // Append passphrase if configured
+    const passphrase = Deno.env.get('PAYFAST_PASSPHRASE')
+    if (passphrase) {
+      parts.push(`passphrase=${encodeURIComponent(passphrase.trim()).replace(/%20/g, '+')}`)
     }
 
     const computed = createHash('md5').update(parts.join('&')).digest('hex')
