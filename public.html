@@ -193,8 +193,9 @@ function renderVendorFormMarkets() {
         + '</div>';
     }
     var feeText = hasOptions ? 'From R'+types[0].fee+'/date' : 'Stall fee: R'+types[0].fee+'/date';
+    var timesHtml = (m.start_time && m.end_time) ? '<div class="msc-fee">&#128336; '+m.start_time+' to '+m.end_time+'</div>' : (m.start_time ? '<div class="msc-fee">&#128336; From '+m.start_time+'</div>' : '');
     var deadlineHtml = m.deadline ? '<div class="msc-fee" style="color:var(--text3)">&#128197; Apply by '+m.deadline+'</div>' : '';
-    return '<div class="market-select-card" onclick="toggleMktCheck(\''+m.id+'\',this)"><input type="checkbox" class="v-mkt-check" id="vc-'+m.id+'" value="'+m.id+'" onclick="event.stopPropagation();this.closest(\'.market-select-card\').classList.toggle(\'selected\',this.checked)"><div style="flex:1"><div class="msc-name">'+esc(m.name)+'</div><div class="msc-dates">'+((m.dates||[]).join(' · ')||'Dates TBC')+'</div><div class="msc-fee">'+feeText+'</div>'+deadlineHtml+stallOptions+'</div></div>';
+    return '<div class="market-select-card" onclick="toggleMktCheck(\''+m.id+'\',this)"><input type="checkbox" class="v-mkt-check" id="vc-'+m.id+'" value="'+m.id+'" onclick="event.stopPropagation();this.closest(\'.market-select-card\').classList.toggle(\'selected\',this.checked)"><div style="flex:1"><div class="msc-name">'+esc(m.name)+'</div><div class="msc-dates">'+((m.dates||[]).join(' · ')||'Dates TBC')+'</div>'+timesHtml+'<div class="msc-fee">'+feeText+'</div>'+deadlineHtml+stallOptions+'</div></div>';
   }).join('');
 }
 
