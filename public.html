@@ -95,7 +95,7 @@ async function init() {
   var slug = params.get('slug');
   if (!slug) { showError('No market specified in the URL.'); return; }
 
-  var {data: profile} = await _sb.from('profiles').select('*').eq('slug', slug).maybeSingle();
+  var {data: profile} = await _sb.from('profiles').select('id, market_name, slug, coordinator_email, settings').eq('slug', slug).maybeSingle();
   if (!profile) { showError('This market page doesn\'t exist or has been removed.'); return; }
   coordinator = profile;
 
@@ -218,6 +218,8 @@ function handleVendorImages(e) {
   var files = Array.from(e.target.files).slice(0, 4-_vendorImages.length);
   files.forEach(function(file) {
     if (_vendorImages.length >= 4) return;
+    if (!['image/jpeg','image/png','image/gif','image/webp'].includes(file.type)) { alert('Only image files are allowed (JPEG, PNG, GIF, WebP).'); return; }
+    if (file.size > 5 * 1024 * 1024) { alert('Images must be under 5MB.'); return; }
     var r = new FileReader();
     r.onload = function(ev) { _vendorImages.push(ev.target.result); renderVendorThumbs(); };
     r.readAsDataURL(file);
@@ -242,7 +244,7 @@ async function submitVendorForm() {
   var selectedMarkets = Array.from(document.querySelectorAll('.v-mkt-check:checked')).map(function(c){return c.value;});
   if (!name||!desc||!email) { alert('Please fill in all required fields.'); return; }
   if (!selectedMarkets.length) { alert('Please select at least one market.'); return; }
-  if (!email.includes('@')) { alert('Please enter a valid email address.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email address.'); return; }
   var today = new Date().toISOString().slice(0,10);
   var closedMkt = selectedMarkets.find(function(mid){ var m=markets.find(function(x){return x.id===mid;}); return m&&m.deadline&&m.deadline<today; });
   if (closedMkt) { alert('Applications for one or more selected markets are closed.'); return; }
@@ -296,7 +298,7 @@ async function submitVendorForm() {
     pay_status: 'outstanding',
     pay_method: null,
     images: _vendorImages.slice(),
-    submitted_at: new Date().toLocaleDateString('en-ZA'),
+    submitted_at: new Date().toISOString().slice(0,10),
     ...(customFields.length&&Object.keys(customResponses).length?{custom_responses:customResponses}:{})
   });
 
