@@ -168,7 +168,7 @@ function renderMarkets() {
     var dates = (m.dates||[]).map(function(d){return '<span class="date-chip">'+esc(d)+'</span>';}).join('');
     var bi = m.banner ? '<img src="'+m.banner+'">' : esc(m.header||m.name);
     var closed = m.deadline && m.deadline < today;
-    var deadlineHtml = m.deadline ? '<div style="margin-top:6px"><span style="font-size:11px;color:'+(closed?'var(--red)':'var(--text3)')+'">&#128197; '+(closed?'Applications closed':'Apply by '+m.deadline)+'</span></div>' : '';
+    var deadlineHtml = m.deadline ? '<div style="margin-top:6px"><span style="font-size:11px;color:'+(closed?'var(--red)':'var(--text3)')+'">'+(closed?'Applications closed':'Apply by '+m.deadline)+'</span></div>' : '';
     var applyBtn = closed ? '<span style="font-size:12px;color:var(--red)">Applications closed</span>' : '<button class="btn small primary" onclick="pubTab(\'apply\')">Apply to attend</button>';
     return '<div class="market-card" style="margin-bottom:1rem"><div class="market-banner">'+bi+'</div><div class="market-body"><strong style="font-size:15px">'+esc(m.name)+'</strong><p style="font-size:13px;margin:6px 0 8px">'+esc(m.description||'')+'</p><div class="date-chips">'+dates+'</div>'+deadlineHtml+'</div><div class="market-footer"><span style="font-size:12px;color:var(--text2)">Stall fee: R'+(m.fee||350)+'/date</span>'+applyBtn+'</div></div>';
   }).join('');
@@ -193,8 +193,8 @@ function renderVendorFormMarkets() {
         + '</div>';
     }
     var feeText = hasOptions ? 'From R'+types[0].fee+'/date' : 'Stall fee: R'+types[0].fee+'/date';
-    var timesHtml = (m.start_time && m.end_time) ? '<div class="msc-fee">&#128336; '+m.start_time+' to '+m.end_time+'</div>' : (m.start_time ? '<div class="msc-fee">&#128336; From '+m.start_time+'</div>' : '');
-    var deadlineHtml = m.deadline ? '<div class="msc-fee" style="color:var(--text3)">&#128197; Apply by '+m.deadline+'</div>' : '';
+    var timesHtml = (m.start_time && m.end_time) ? '<div class="msc-fee">'+m.start_time+' to '+m.end_time+'</div>' : (m.start_time ? '<div class="msc-fee">From '+m.start_time+'</div>' : '');
+    var deadlineHtml = m.deadline ? '<div class="msc-fee" style="color:var(--text3)">Apply by '+m.deadline+'</div>' : '';
     return '<div class="market-select-card" onclick="toggleMktCheck(\''+m.id+'\',this)"><input type="checkbox" class="v-mkt-check" id="vc-'+m.id+'" value="'+m.id+'" onclick="event.stopPropagation();this.closest(\'.market-select-card\').classList.toggle(\'selected\',this.checked)"><div style="flex:1"><div class="msc-name">'+esc(m.name)+'</div><div class="msc-dates">'+((m.dates||[]).join(' · ')||'Dates TBC')+'</div>'+timesHtml+'<div class="msc-fee">'+feeText+'</div>'+deadlineHtml+stallOptions+'</div></div>';
   }).join('');
 }
