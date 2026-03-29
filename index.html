@@ -218,10 +218,10 @@
   </div>
 
   <div id="page-markets" class="page">
-    <div class="page-banner teal"><div class="page-banner-icon">&#9776;</div><div><div class="page-banner-title">Markets</div><div class="page-banner-desc">Create and manage your market events. <strong>+ New market</strong> lets you configure a market name, dates, stall types &amp; pricing, max capacity, description, and a banner image. Each market card shows your current stall fill rate. <strong>View dashboard</strong> opens that market's individual stats, approved vendor list, waitlist, and notes. <strong>Edit</strong> updates the market details. <strong>Duplicate</strong> copies the market as a starting point for a new one. <strong>Publish / Unpublish</strong> controls whether the market is visible on your public vendor page — only published markets appear to applicants. <strong>Delete</strong> permanently removes the market. To share your vendor page, go to <strong>☰ Settings → Copy vendor page link</strong>.</div></div></div>
+    <div class="page-banner teal"><div class="page-banner-icon">&#9776;</div><div><div class="page-banner-title">Markets</div><div class="page-banner-desc">Create and manage your market events. <strong>+ New market</strong> lets you configure a market name, dates, stall types &amp; pricing, max capacity, description, and a banner image. Each market card shows your current stall fill rate. <strong>View dashboard</strong> opens that market's individual stats, approved vendor list, waitlist, and notes. <strong>Edit</strong> updates the market details. <strong>Duplicate</strong> copies the market as a starting point for a new one. <strong>Publish / Unpublish</strong> controls whether the market is visible on your public vendor page — only published markets appear to applicants. <strong>Delete</strong> permanently removes the market. To share your vendor page, use the <strong>Copy vendor page link</strong> button at the top of this page.</div></div></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
       <h2 style="margin:0">Markets</h2>
-      <button class="btn primary" onclick="openMarketModal(null)">+ New market</button>
+      <div class="btn-row"><button class="btn" onclick="copyVendorLink()">Copy vendor page link</button><button class="btn primary" onclick="openMarketModal(null)">+ New market</button></div>
     </div>
     <div id="markets-list"></div>
     <div id="markets-empty" class="empty-state" style="display:none">No markets yet. Create one to get started.</div>
