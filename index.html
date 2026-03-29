@@ -319,15 +319,15 @@
           <p class="settings-sec-desc">Customise the look and feel of your dashboard</p>
           <div class="settings-row">
             <div><div class="settings-row-title">Dark mode</div><div class="settings-row-sub">Switch between light and dark theme</div></div>
-            <span class="sm-badge off" id="sp-dark-val" onclick="toggleDark()" style="cursor:pointer;user-select:none">Off</span>
+            <label class="toggle-switch" onclick="toggleDark();event.preventDefault()"><input type="checkbox" id="sp-dark-val" tabindex="-1"><span class="toggle-track"></span></label>
           </div>
           <div class="settings-row">
             <div><div class="settings-row-title">Page hints</div><div class="settings-row-sub">Show or hide the descriptive hint banners on each page</div></div>
-            <span class="sm-badge" id="sp-hints-val" onclick="toggleHints()" style="cursor:pointer;user-select:none">Shown</span>
+            <label class="toggle-switch" onclick="toggleHints();event.preventDefault()"><input type="checkbox" id="sp-hints-val" tabindex="-1" checked><span class="toggle-track"></span></label>
           </div>
           <div class="settings-row">
             <div><div class="settings-row-title">Market calendar</div><div class="settings-row-sub">Show or hide the calendar widget on the home dashboard</div></div>
-            <span class="sm-badge" id="sp-cal-val" onclick="toggleCalendar()" style="cursor:pointer;user-select:none">Shown</span>
+            <label class="toggle-switch" onclick="toggleCalendar();event.preventDefault()"><input type="checkbox" id="sp-cal-val" tabindex="-1" checked><span class="toggle-track"></span></label>
           </div>
         </div>
         <div class="settings-sec" id="ssec-payment">
@@ -338,7 +338,10 @@
           <div class="form-group"><label class="form-label">Merchant ID</label><input class="form-input" id="pf-merchant-id" type="text" placeholder="e.g. 10011914"><div style="font-size:11px;color:var(--text3);margin-top:4px">Found in your PayFast dashboard under Settings → Merchant Details</div></div>
           <div class="form-group"><label class="form-label">Merchant Key</label><input class="form-input" id="pf-merchant-key" type="text" placeholder="e.g. q1cd2rdny4a53"><div style="font-size:11px;color:var(--text3);margin-top:4px">Found next to your Merchant ID in PayFast</div></div>
           <div class="form-group"><label class="form-label">Passphrase <span style="font-weight:400;color:var(--text3)">(optional)</span></label><input class="form-input" id="pf-passphrase" type="password" placeholder="Your PayFast passphrase"><div style="font-size:11px;color:var(--text3);margin-top:4px">Set in PayFast under Settings → General. Leave blank if you have not set one.</div></div>
-          <div class="form-group"><label style="display:flex;align-items:center;gap:10px;cursor:pointer"><input type="checkbox" id="pf-sandbox" style="width:16px;height:16px;flex-shrink:0"><span class="form-label" style="margin:0">Sandbox mode <span style="font-weight:400;color:var(--text3);font-size:11px">— testing only</span></span></label><div style="font-size:11px;color:var(--text3);margin-top:4px">Routes payments to sandbox.payfast.co.za using your sandbox credentials. Disable for live payments.</div></div>
+          <div class="settings-row" style="margin-bottom:1.5rem">
+            <div><div class="settings-row-title">Sandbox mode <span style="font-weight:400;color:var(--text3);font-size:11px">— testing only</span></div><div class="settings-row-sub">Routes payments to sandbox.payfast.co.za. Disable for live payments.</div></div>
+            <label class="toggle-switch"><input type="checkbox" id="pf-sandbox"><span class="toggle-track"></span></label>
+          </div>
           <div class="mf-section-label">EFT / Bank transfer</div>
           <p style="font-size:13px;color:var(--text2);margin-bottom:1rem">If filled in, vendors will also see your banking details in payment reminder emails as an alternative to PayFast.</p>
           <div class="form-group"><label class="form-label">Account holder</label><input class="form-input" id="bank-holder" type="text" placeholder="e.g. Jane Smith"></div>
@@ -372,9 +375,9 @@
           <div class="form-group"><label class="form-label">Your name</label><input class="form-input" id="acc-name" type="text" placeholder="Your name"></div>
           <div class="form-group"><label class="form-label">Market name</label><input class="form-input" id="acc-market" type="text" disabled style="opacity:0.5;cursor:not-allowed"><div style="font-size:11px;color:var(--text3);margin-top:4px">&#9888; Cannot be changed — it's tied to your public vendor page URL.</div></div>
           <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="acc-email" type="text" disabled style="opacity:0.5;cursor:not-allowed"><div style="font-size:11px;color:var(--text3);margin-top:4px">To change your email, contact support.</div></div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:0.5px solid var(--border);margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccNotify()">
-            <div><div style="font-size:13px;font-weight:500;color:var(--text)">Application email notifications</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Email me when a vendor submits a new application</div></div>
-            <span class="sm-badge" id="acc-notify-val">On</span>
+          <div class="settings-row" style="margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccNotify()">
+            <div><div class="settings-row-title">Application email notifications</div><div class="settings-row-sub">Email me when a vendor submits a new application</div></div>
+            <label class="toggle-switch" onclick="event.preventDefault()"><input type="checkbox" id="acc-notify-val" tabindex="-1" checked><span class="toggle-track"></span></label>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem">
             <button class="btn primary" id="acc-save-btn" onclick="saveAccountSettings()">Save</button>
