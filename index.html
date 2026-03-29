@@ -272,7 +272,7 @@
   <div id="page-public" class="page" style="padding:0;max-width:100%">
     <div style="background:var(--bg2);min-height:calc(100vh - var(--nav-h))">
     <div class="public-page">
-      <div class="page-banner blue" style="margin-bottom:1rem"><div class="page-banner-icon">&#128065;</div><div><div class="page-banner-title">PicaMarket — Vendor-facing page</div><div class="page-banner-desc">This is what vendors will see. They can browse your published markets and submit an application. Vendors cannot see the rest of the dashboard.</div></div></div>
+      <div class="page-banner blue" style="margin-bottom:1rem"><div class="page-banner-icon"></div><div><div class="page-banner-title">PicaMarket — Vendor-facing page</div><div class="page-banner-desc">This is what vendors will see. They can browse your published markets and submit an application. Vendors cannot see the rest of the dashboard.</div></div></div>
       <div class="public-banner"><div class="public-banner-text"><div style="font-size:20px;font-weight:500;color:var(--blue)" id="pub-title">Upcoming Markets</div><div style="font-size:13px;color:var(--text2);margin-top:4px">Browse and apply to attend as a vendor</div></div></div>
       <div class="tabs-inner">
         <div class="tab-inner active" onclick="pubTab('browse')">Browse markets</div>
@@ -381,10 +381,10 @@
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem">
             <button class="btn primary" id="acc-save-btn" onclick="saveAccountSettings()">Save</button>
-            <button class="btn" onclick="copyVendorLink()">&#128279; Copy vendor page link</button>
+            <button class="btn" onclick="copyVendorLink()">Copy vendor page link</button>
           </div>
           <hr style="border:none;border-top:0.5px solid var(--border);margin-bottom:1.25rem">
-          <button class="btn" style="font-size:13px" onclick="sendPasswordResetFromAccount()">&#128274; Change password</button>
+          <button class="btn" style="font-size:13px" onclick="sendPasswordResetFromAccount()">Change password</button>
         </div>
       </div>
     </div>
@@ -397,14 +397,14 @@
 <div class="modal-overlay" id="settings-overlay" onclick="closeSettingsMenu()">
   <div class="settings-menu" id="settings-menu" onclick="event.stopPropagation()">
     <div class="sm-title">Settings</div>
-    <button onclick="toggleDark()"><span>🌙 Dark mode</span><span class="sm-badge off" id="sm-dark-val">Off</span></button>
-    <button onclick="toggleHints()"><span>💡 Hints</span><span class="sm-badge" id="sm-hints-val">Shown</span></button>
-    <button onclick="openPaymentSettings()"><span>&#128179; Payment settings</span></button>
-    <button onclick="openEmailTemplates()"><span>&#9993; Email templates</span></button>
-    <button onclick="openBlockedVendors()"><span>&#128683; Blocked vendors</span></button>
+    <button onclick="toggleDark()"><span>Dark mode</span><span class="sm-badge off" id="sm-dark-val">Off</span></button>
+    <button onclick="toggleHints()"><span>Hints</span><span class="sm-badge" id="sm-hints-val">Shown</span></button>
+    <button onclick="openPaymentSettings()"><span>Payment settings</span></button>
+    <button onclick="openEmailTemplates()"><span>Email templates</span></button>
+    <button onclick="openBlockedVendors()"><span>Blocked vendors</span></button>
     <hr class="sm-sep">
-    <button onclick="copyVendorLink()"><span>&#128279; Copy vendor page link</span></button>
-    <button onclick="openAccountSettings()"><span>&#128100; Account settings</span></button>
+    <button onclick="copyVendorLink()"><span>Copy vendor page link</span></button>
+    <button onclick="openAccountSettings()"><span>Account settings</span></button>
   </div>
 </div>
 
@@ -416,9 +416,9 @@
   <div class="dm-label" id="dot-menu-label"></div>
   <button onclick="dotMenuAction('addmarket')">&#43; Add to market</button>
   <button onclick="dotMenuAction('credit')">&#8631; Credit to another market</button>
-  <button onclick="dotMenuAction('pay')">&#128179; Update payment</button>
-  <button onclick="dotMenuAction('reminder')" id="dot-reminder-btn">&#9993; Send payment reminder</button>
-  <button onclick="dotMenuAction('remove')" class="danger">&#128465; Remove vendor</button>
+  <button onclick="dotMenuAction('pay')">Update payment</button>
+  <button onclick="dotMenuAction('reminder')" id="dot-reminder-btn">Send payment reminder</button>
+  <button onclick="dotMenuAction('remove')" class="danger">Remove vendor</button>
 </div>
 
 <!-- MASS ACTION MENU (APPROVED) -->
@@ -426,9 +426,9 @@
   <div class="dm-label" id="mass-action-approved-label"></div>
   <button onclick="massActionApproved('addmarket')">&#43; Add to market</button>
   <button onclick="massActionApproved('credit')">&#8631; Credit to another market</button>
-  <button onclick="massActionApproved('pay')">&#128179; Update payment</button>
-  <button onclick="massActionApproved('reminder')">&#9993; Send payment reminders</button>
-  <button onclick="massActionApproved('remove')" class="danger">&#128465; Remove vendors</button>
+  <button onclick="massActionApproved('pay')">Update payment</button>
+  <button onclick="massActionApproved('reminder')">Send payment reminders</button>
+  <button onclick="massActionApproved('remove')" class="danger">Remove vendors</button>
 </div>
 
 <!-- MODALS -->
