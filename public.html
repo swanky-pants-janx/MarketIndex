@@ -112,6 +112,25 @@ async function init() {
   renderMarkets();
   renderVendorFormMarkets();
   renderVendorForm(profile.settings&&profile.settings.form_fields||null);
+  tryVendorAutofill();
+}
+
+function tryVendorAutofill() {
+  try {
+    var saved = localStorage.getItem('pm_vendor_autofill');
+    if (!saved) return;
+    var data = JSON.parse(saved);
+    var nameEl = document.getElementById('v-name');
+    var descEl = document.getElementById('v-desc');
+    var emailEl = document.getElementById('v-email');
+    if (nameEl && data.stall_name) nameEl.value = data.stall_name;
+    if (descEl && data.what_you_sell) descEl.value = data.what_you_sell;
+    if (emailEl && data.email) emailEl.value = data.email;
+    if (data.images && data.images.length) {
+      _vendorImages = data.images.slice(0, 4);
+      renderVendorThumbs();
+    }
+  } catch(e) { /* ignore corrupt cache */ }
 }
 
 var DEFAULT_FORM_FIELDS=[

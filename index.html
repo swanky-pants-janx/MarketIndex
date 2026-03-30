@@ -47,7 +47,11 @@
 <div id="auth-screen" class="auth-wrap">
   <div class="auth-card">
     <div class="auth-logo"><img src="PicaMarketLogo.png" alt="PicaMarket" style="max-width:180px;height:auto"></div>
-    <div class="auth-sub">Market runner dashboard</div>
+    <div style="display:flex;gap:0;margin-bottom:1.25rem;border:0.5px solid var(--border);border-radius:10px;overflow:hidden">
+      <button id="at-organiser" onclick="switchAccountType('organiser')" style="flex:1;padding:9px 12px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:var(--blue);color:#fff;transition:background 0.15s,color 0.15s">Market Organiser</button>
+      <button id="at-vendor" onclick="switchAccountType('vendor')" style="flex:1;padding:9px 12px;font-size:12px;font-weight:600;border:none;cursor:pointer;background:none;color:var(--text2);transition:background 0.15s,color 0.15s">Vendor</button>
+    </div>
+    <div id="auth-type-desc" style="font-size:12px;color:var(--text3);margin:-0.5rem 0 1rem;text-align:center">Run and manage your markets, vendors, and applications</div>
     <div class="auth-tabs">
       <div class="auth-tab active" onclick="switchAuthTab('login')">Log in</div>
       <div class="auth-tab" onclick="switchAuthTab('register')">Create account</div>
@@ -66,8 +70,13 @@
       <p style="font-size:12px;color:var(--text2);text-align:center;margin-top:1rem"><span style="color:var(--blue);cursor:pointer" onclick="switchAuthTab('login')">Back to log in</span></p>
     </div>
     <div id="auth-register" style="display:none">
-      <div class="form-group"><label class="form-label">Market name *</label><input class="form-input" id="reg-market" type="text" placeholder="e.g. Picnic & Thrift"></div>
-      <div class="form-group"><label class="form-label">Your name *</label><input class="form-input" id="reg-name" type="text" placeholder="e.g. Sarah"></div>
+      <div id="reg-organiser-fields">
+        <div class="form-group"><label class="form-label">Market name *</label><input class="form-input" id="reg-market" type="text" placeholder="e.g. Picnic & Thrift"></div>
+        <div class="form-group"><label class="form-label">Your name *</label><input class="form-input" id="reg-name" type="text" placeholder="e.g. Sarah"></div>
+      </div>
+      <div id="reg-vendor-fields" style="display:none">
+        <div class="form-group"><label class="form-label">Stall name *</label><input class="form-input" id="reg-stall" type="text" placeholder="e.g. Sunshine Bakes"></div>
+      </div>
       <div class="form-group"><label class="form-label">Email *</label><input class="form-input" id="reg-email" type="email" placeholder="you@example.com"></div>
       <div class="form-group"><label class="form-label">Password *</label><input class="form-input" id="reg-password" type="password" placeholder="At least 8 characters" oninput="updatePwStrength('reg-password','reg-pw-strength')"><div class="pw-strength-wrap" id="reg-pw-strength" style="display:none"><div class="pw-strength-bar"><div class="pw-strength-fill" id="reg-pw-fill"></div></div><span class="pw-strength-label" id="reg-pw-label"></span></div></div>
       <div class="form-group"><label class="form-label">Confirm password *</label><input class="form-input" id="reg-confirm" type="password" placeholder="Repeat password"></div>
@@ -378,6 +387,14 @@
           <div class="settings-row" style="margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccNotify()">
             <div><div class="settings-row-title">Application email notifications</div><div class="settings-row-sub">Email me when a vendor submits a new application</div></div>
             <label class="toggle-switch" onclick="event.preventDefault()"><input type="checkbox" id="acc-notify-val" tabindex="-1" checked><span class="toggle-track"></span></label>
+          </div>
+          <div class="settings-row" style="margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccPublic()">
+            <div><div class="settings-row-title">Show in Vendor Directory</div><div class="settings-row-sub">Allow vendors to discover your market in the vendor-facing directory</div></div>
+            <label class="toggle-switch" onclick="event.preventDefault()"><input type="checkbox" id="acc-public-val" tabindex="-1"><span class="toggle-track"></span></label>
+          </div>
+          <div class="form-group" id="acc-desc-group">
+            <label class="form-label">Public description <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+            <textarea class="form-input" id="acc-desc" rows="3" placeholder="Briefly describe your market — vendors will see this in the directory." style="resize:vertical;min-height:72px"></textarea>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem">
             <button class="btn primary" id="acc-save-btn" onclick="saveAccountSettings()">Save</button>
