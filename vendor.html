@@ -32,6 +32,7 @@
     <div class="nav-tabs">
       <div class="nav-tab active" onclick="vdShowPage('directory')">Market Directory</div>
       <div class="nav-tab" onclick="vdShowPage('profile')">My Profile</div>
+      <div class="nav-tab" onclick="vdShowPage('settings')">Settings</div>
     </div>
     <div class="nav-right">
       <span class="nav-user" id="vd-nav-user"></span>
@@ -44,11 +45,13 @@
   <nav class="bottom-nav">
     <button class="bottom-nav-item active" onclick="vdShowPage('directory')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Directory</span></button>
     <button class="bottom-nav-item" onclick="vdShowPage('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></button>
+    <button class="bottom-nav-item" onclick="vdShowPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></button>
   </nav>
 
   <aside class="sidebar" id="vd-sidebar">
     <button class="sidebar-item active" onclick="vdShowPage('directory')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><span>Market Directory</span></button>
     <button class="sidebar-item" onclick="vdShowPage('profile')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>My Profile</span></button>
+    <button class="sidebar-item" onclick="vdShowPage('settings')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></button>
     <div class="sidebar-spacer"></div>
     <div class="sidebar-user" id="vd-sidebar-user"></div>
     <div class="sidebar-divider"></div>
@@ -92,6 +95,45 @@
       <div id="vd-dir-content">
         <div class="dir-grid" id="vd-dir-grid"></div>
         <div class="dir-empty" id="vd-dir-empty" style="display:none">No market organisers are publicly listed yet.</div>
+      </div>
+    </div>
+
+    <!-- SETTINGS PAGE -->
+    <div id="vd-page-settings" class="page">
+      <h2 style="margin-bottom:1.5rem">Settings</h2>
+      <div class="settings-layout">
+        <aside class="settings-nav">
+          <div class="settings-nav-group">
+            <span class="settings-nav-label">Configuration</span>
+            <button class="settings-nav-item active" id="vd-snav-appearance" onclick="vdShowSettingsSec('appearance')">Appearance</button>
+          </div>
+          <div class="settings-nav-group">
+            <span class="settings-nav-label">Account</span>
+            <button class="settings-nav-item" id="vd-snav-account" onclick="vdShowSettingsSec('account')">Account settings</button>
+          </div>
+        </aside>
+        <div class="settings-body">
+          <div class="settings-sec active" id="vd-ssec-appearance">
+            <h3 class="settings-sec-title">Appearance</h3>
+            <p class="settings-sec-desc">Customise the look and feel of your dashboard</p>
+            <div class="settings-row">
+              <div><div class="settings-row-title">Dark mode</div><div class="settings-row-sub">Switch between light and dark theme</div></div>
+              <label class="toggle-switch" onclick="vdToggleDark();event.preventDefault()"><input type="checkbox" id="vd-sp-dark-val" tabindex="-1"><span class="toggle-track"></span></label>
+            </div>
+          </div>
+          <div class="settings-sec" id="vd-ssec-account">
+            <h3 class="settings-sec-title">Account settings</h3>
+            <p class="settings-sec-desc">Update your stall name, contact email, and password.</p>
+            <div class="form-group"><label class="form-label">Stall / shop name</label><input class="form-input" id="vd-acc-stall" type="text"></div>
+            <div class="form-group"><label class="form-label">Contact email</label><input class="form-input" id="vd-acc-email" type="email"></div>
+            <div class="form-group"><label class="form-label">Login email</label><input class="form-input" id="vd-acc-login-email" type="text" disabled style="opacity:0.5;cursor:not-allowed"><div style="font-size:11px;color:var(--text3);margin-top:4px">To change your login email, contact support.</div></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem">
+              <button class="btn primary" id="vd-acc-save-btn" onclick="vdSaveAccountSettings()">Save</button>
+            </div>
+            <hr style="border:none;border-top:0.5px solid var(--border);margin-bottom:1.25rem">
+            <button class="btn" style="font-size:13px" onclick="vdSendPasswordReset()">Change password</button>
+          </div>
+        </div>
       </div>
     </div>
 

@@ -6,6 +6,7 @@ var _sb = window.supabase.createClient(
 var _vendorUser = null;
 var _vendorProfile = null;
 var _vpImages = []; // { url: string, file: File|null }
+var _vdDarkMode = false;
 
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
 function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
@@ -25,6 +26,9 @@ _sb.auth.onAuthStateChange(async(event, session) => {
 
 // ── INIT ──────────────────────────────────────────────────────────
 function vdInit() {
+  var saved = JSON.parse(localStorage.getItem('pm_vd_settings') || '{}');
+  _vdDarkMode = !!saved.dark_mode;
+  document.body.classList.toggle('dark', _vdDarkMode);
   document.getElementById('vd-loading').style.display = 'none';
   document.getElementById('vd-dashboard').style.display = 'block';
   var stallName = _vendorProfile.stall_name || '';
@@ -43,7 +47,7 @@ function vdShowPage(p) {
   document.querySelectorAll('.bottom-nav-item').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('#vd-sidebar .sidebar-item').forEach(el => el.classList.remove('active'));
   document.getElementById('vd-page-' + p).classList.add('active');
-  var map = { directory: 0, profile: 1 };
+  var map = { directory: 0, profile: 1, settings: 2 };
   if (map[p] !== undefined) {
     var nt = document.querySelectorAll('.nav-tab')[map[p]];
     if (nt) nt.classList.add('active');
@@ -52,6 +56,7 @@ function vdShowPage(p) {
     var si = document.querySelectorAll('#vd-sidebar .sidebar-item')[map[p]];
     if (si) si.classList.add('active');
   }
+  if (p === 'settings') vdSyncSettings();
   window.scrollTo(0, 0);
 }
 
@@ -212,4 +217,64 @@ function vdSkipOnboarding() {
 
 function vdOpenOrganiser(slug) {
   window.open('public.html?slug=' + encodeURIComponent(slug), '_blank');
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────────
+function vdShowSettingsSec(sec) {
+  document.querySelectorAll('#vd-page-settings .settings-sec').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('#vd-page-settings .settings-nav-item').forEach(el => el.classList.remove('active'));
+  var el = document.getElementById('vd-ssec-' + sec);
+  if (el) el.classList.add('active');
+  var nav = document.getElementById('vd-snav-' + sec);
+  if (nav) nav.classList.add('active');
+}
+
+function vdSyncSettings() {
+  var dv = document.getElementById('vd-sp-dark-val');
+  if (dv) dv.checked = _vdDarkMode;
+  var p = _vendorProfile;
+  var sa = document.getElementById('vd-acc-stall');
+  if (sa) sa.value = p.stall_name || '';
+  var ae = document.getElementById('vd-acc-email');
+  if (ae) ae.value = p.email || '';
+  var le = document.getElementById('vd-acc-login-email');
+  if (le) le.value = _vendorUser.email || '';
+}
+
+function vdToggleDark() {
+  _vdDarkMode = !_vdDarkMode;
+  document.body.classList.toggle('dark', _vdDarkMode);
+  var saved = JSON.parse(localStorage.getItem('pm_vd_settings') || '{}');
+  saved.dark_mode = _vdDarkMode;
+  localStorage.setItem('pm_vd_settings', JSON.stringify(saved));
+  var dv = document.getElementById('vd-sp-dark-val');
+  if (dv) dv.checked = _vdDarkMode;
+}
+
+async function vdSaveAccountSettings() {
+  var stallName = document.getElementById('vd-acc-stall').value.trim();
+  var email = document.getElementById('vd-acc-email').value.trim().toLowerCase();
+  if (!stallName || !email) { showToast('Stall name and email are required.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email.'); return; }
+  var btn = document.getElementById('vd-acc-save-btn');
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  var { error } = await _sb.from('vendor_profiles').update({
+    stall_name: stallName, email: email, updated_at: new Date().toISOString()
+  }).eq('user_id', _vendorUser.id);
+  btn.textContent = 'Save'; btn.disabled = false;
+  if (error) { showToast('Save failed. Please try again.'); return; }
+  _vendorProfile.stall_name = stallName;
+  _vendorProfile.email = email;
+  document.getElementById('vd-nav-brand').textContent = stallName;
+  document.getElementById('vd-nav-user').textContent = stallName;
+  document.getElementById('vd-sidebar-user').textContent = stallName;
+  document.getElementById('vp-stall-name').value = stallName;
+  document.getElementById('vp-email').value = email;
+  showToast('Account settings saved!');
+}
+
+async function vdSendPasswordReset() {
+  var { error } = await _sb.auth.resetPasswordForEmail(_vendorUser.email, { redirectTo: 'https://picamarket.site/' });
+  if (error) { showToast('Failed to send reset email.'); return; }
+  showToast('Password reset link sent to your email!');
 }
