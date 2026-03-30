@@ -68,6 +68,13 @@ function vdPopulateProfile() {
   document.getElementById('vp-email').value = p.email || _vendorUser.email || '';
   _vpImages = (p.images || []).map(url => ({ url, file: null }));
   vdRenderImagePreview();
+  // Keep autofill cache in sync so public.html can pre-fill application forms
+  localStorage.setItem('pm_vendor_autofill', JSON.stringify({
+    stall_name: p.stall_name || '',
+    what_you_sell: p.what_you_sell || '',
+    email: p.email || _vendorUser.email || '',
+    images: p.images || []
+  }));
 }
 
 function vdRenderImagePreview() {
