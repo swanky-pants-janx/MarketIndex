@@ -22,6 +22,11 @@ _sb.auth.onAuthStateChange(async(event, session) => {
     if (!vp) { window.location.href = 'index.html'; return; }
     _vendorUser = session.user;
     _vendorProfile = vp;
+    // Ensure email is set so organiser verified-badge matching works
+    if (!vp.email && session.user.email) {
+      await _sb.from('vendor_profiles').update({ email: session.user.email }).eq('user_id', session.user.id);
+      _vendorProfile.email = session.user.email;
+    }
     vdInit();
   }
 });
