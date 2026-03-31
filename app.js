@@ -147,29 +147,49 @@ async function runStressTest(){
     {name:'Pop-Up Fashion Fair',stallTypes:[{id:'rack',name:'Clothing rack',fee:250,color:'#db2777'},{id:'booth',name:'Full booth',fee:500,color:'#7c3aed'}]},
     {name:'Community Flea Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:150,color:'#6b7280'}]},
     {name:'Garden Market',stallTypes:[{id:'small',name:'Small plot',fee:200,color:'#16a34a'},{id:'large',name:'Large plot',fee:380,color:'#0d9488'}]},
-    {name:'Creative Makers Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:320,color:'#6b7280'},{id:'premium',name:'Premium spot',fee:550,color:'#ca8a04'}]}
+    {name:'Creative Makers Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:320,color:'#6b7280'},{id:'premium',name:'Premium spot',fee:550,color:'#ca8a04'}]},
+    {name:'Makers & Bakers Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:300,color:'#6b7280'}]},
+    {name:'Vintage & Retro Fair',stallTypes:[{id:'small',name:'Small table',fee:180,color:'#db2777'},{id:'large',name:'Full stall',fee:360,color:'#7c3aed'}]},
+    {name:'Seaside Craft Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:400,color:'#0d9488'}]},
+    {name:'Urban Street Food Festival',stallTypes:[{id:'food',name:'Food stall',fee:500,color:'#ea580c'},{id:'bev',name:'Beverage stall',fee:420,color:'#2563eb'}]},
+    {name:'Eco & Sustainable Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:280,color:'#16a34a'}]},
+    {name:'Holiday Gift Market',stallTypes:[{id:'small',name:'Small (2m)',fee:250,color:'#ca8a04'},{id:'large',name:'Large (4m)',fee:480,color:'#dc2626'}]},
+    {name:'Weekend Wellness Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:350,color:'#0d9488'},{id:'premium',name:'Premium corner',fee:600,color:'#7c3aed'}]},
+    {name:'Kids & Family Fair',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:200,color:'#6b7280'}]},
+    {name:'Coastal Artisan Market',stallTypes:[{id:'small',name:'Small stall',fee:300,color:'#2563eb'},{id:'large',name:'Large stall',fee:550,color:'#0d9488'}]},
+    {name:'Township Arts Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:180,color:'#6b7280'}]},
+    {name:'Tech & Innovation Fair',stallTypes:[{id:'table',name:'Demo table',fee:450,color:'#4f46e5'},{id:'booth',name:'Full booth',fee:800,color:'#2563eb'}]},
+    {name:'Harvest Festival Market',stallTypes:[{id:'produce',name:'Produce stall',fee:250,color:'#16a34a'},{id:'craft',name:'Craft stall',fee:320,color:'#ca8a04'}]},
+    {name:'Indie Music & Craft Fair',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:300,color:'#db2777'}]},
+    {name:'Morning Brew Market',stallTypes:[{id:'small',name:'Small stall',fee:220,color:'#ca8a04'},{id:'large',name:'Large stall',fee:420,color:'#ea580c'}]},
+    {name:'Sunset Night Bazaar',stallTypes:[{id:'standard',name:'Standard',fee:380,color:'#4f46e5'},{id:'premium',name:'Premium',fee:680,color:'#dc2626'}]},
+    {name:'Handmade & Homegrown',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:260,color:'#16a34a'}]},
+    {name:'Pet & Animal Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:220,color:'#0d9488'}]},
+    {name:'Cultural Fusion Market',stallTypes:[{id:'small',name:'Small (2m)',fee:200,color:'#db2777'},{id:'large',name:'Large (4m)',fee:380,color:'#ea580c'}]},
+    {name:'Mountain Makers Market',stallTypes:[{id:'normal-stall',name:'Normal stall',fee:310,color:'#6b7280'},{id:'premium',name:'Premium spot',fee:560,color:'#ca8a04'}]},
+    {name:'Waterfront Weekend Market',stallTypes:[{id:'food',name:'Food vendor',fee:480,color:'#ea580c'},{id:'craft',name:'Craft stall',fee:340,color:'#7c3aed'},{id:'premium',name:'Waterfront corner',fee:700,color:'#2563eb'}]}
   ];
   var markets=marketDefs.map(function(def,i){
-    var isFuture=i<7;
-    return{id:uid(),user_id:currentUser.id,name:def.name,description:'A wonderful '+def.name.toLowerCase()+' featuring local vendors and artisans.',header:'',fee:def.stallTypes[0].fee,stall_types:def.stallTypes,capacity:rndInt(15,60),dates:isFuture?[futureDate(rndInt(7,90)),futureDate(rndInt(91,180))]:[pastDate(rndInt(7,60))],deadline:isFuture?futureDate(rndInt(3,14)):null,start_time:'08:00',end_time:'14:00',banner:null,published:i<8,notes:''};
+    var isFuture=i<22;
+    return{id:uid(),user_id:currentUser.id,name:def.name,description:'A wonderful '+def.name.toLowerCase()+' featuring local vendors and artisans.',header:'',fee:def.stallTypes[0].fee,stall_types:def.stallTypes,capacity:rndInt(15,80),dates:isFuture?[futureDate(rndInt(7,90)),futureDate(rndInt(91,180))]:[pastDate(rndInt(7,90))],deadline:isFuture?futureDate(rndInt(3,14)):null,start_time:'08:00',end_time:'14:00',banner:null,published:i<26,notes:''};
   });
   var{error:mErr}=await _sb.from('markets').insert(markets);
   if(mErr){showToast('Market insert failed: '+mErr.message);return;}
-  showToast('Markets created! Generating vendors...');
+  showToast('30 markets created! Generating vendors...');
   var pubMarkets=markets.filter(function(m){return m.published;});
-  var firstNames=['Amara','Sarah','Thabo','Lisa','Sipho','Maria','James','Nomsa','David','Fatima','Peter','Zanele','Michael','Priya','Lerato','Emma','Kofi','Nadia','Chris','Yemi'];
-  var lastNames=['Smith','Johnson','Dlamini','Nkosi','Petersen','Williams','Maharaj','Okafor','Truter','Botha','Mokoena','Taylor','Naidoo','Khumalo','Brown','Ferreira','Sithole','Hendricks','Mbeki','Ntuli'];
-  var products=['Handmade jewellery','Artisan cheese','Organic produce','Handcrafted ceramics','Vintage clothing','Artisan bread','Natural skincare','Handwoven textiles','Specialty coffee','Hot sauce & condiments','Handmade candles','Fresh flowers','Plant nursery','Artisan chocolates','Photography prints','Woodwork','Fermented foods','Macramé art','Bespoke leather goods','Upcycled furniture'];
-  var TOTAL=200;var vendors=[];
+  var firstNames=['Amara','Sarah','Thabo','Lisa','Sipho','Maria','James','Nomsa','David','Fatima','Peter','Zanele','Michael','Priya','Lerato','Emma','Kofi','Nadia','Chris','Yemi','Aisha','Brendan','Cleo','Deon','Elena','Farai','Grace','Hendrik','Ivy','Johan','Karen','Lebo','Mpho','Naledi','Oscar','Palesa','Quinton','Rudo','Siya','Tanya','Ulrich','Vera','Warren','Xola','Yasmin','Zack','Adaeze','Bongani','Candice','Dlamini'];
+  var lastNames=['Smith','Johnson','Dlamini','Nkosi','Petersen','Williams','Maharaj','Okafor','Truter','Botha','Mokoena','Taylor','Naidoo','Khumalo','Brown','Ferreira','Sithole','Hendricks','Mbeki','Ntuli','Groenewald','Zulu','Patel','Van Wyk','Pretorius','Louw','Mthembu','Jacobs','Mabaso','Coetzee','Du Plessis','Shabalala','Visser','Cele','Swanepoel','Mkhize','Steyn','Ndlovu','Rossouw','Buthelezi'];
+  var products=['Handmade jewellery','Artisan cheese','Organic produce','Handcrafted ceramics','Vintage clothing','Artisan bread','Natural skincare','Handwoven textiles','Specialty coffee','Hot sauce & condiments','Handmade candles','Fresh flowers','Plant nursery','Artisan chocolates','Photography prints','Woodwork','Fermented foods','Macramé art','Bespoke leather goods','Upcycled furniture','Handmade soap','Essential oils','Raw honey','Dried herbs','Homemade jams','Craft beer','Pressed juices','Biltong & dried meats','Handpainted pottery','Wire art','Beaded accessories','Natural dyes & fabric','Mushroom growing kits','Kombucha','Sourdough bread','Vegan baked goods','Handmade pasta','Cold brew coffee','Activated charcoal products','Succulents & cacti'];
+  var TOTAL=1000;var vendors=[];
   for(var i=0;i<TOTAL;i++){
     var fname=rnd(firstNames);var lname=rnd(lastNames);
     var product=rnd(products);
     var stallName=product+' by '+fname;
     var email=fname.toLowerCase()+'.'+lname.toLowerCase().replace(/\s/g,'')+i+'@example.com';
-    var numMkts=rndInt(1,Math.min(3,pubMarkets.length));
+    var numMkts=rndInt(1,Math.min(4,pubMarkets.length));
     var chosen=pubMarkets.slice().sort(function(){return Math.random()-0.5;}).slice(0,numMkts);
     var marketIds=chosen.map(function(m){return m.id;});
-    var isApproved=i>=70;
+    var isApproved=i>=300;
     var marketPayments={};var marketMethods={};var marketStallTypes={};var payStatuses=[];
     chosen.forEach(function(m){
       marketStallTypes[m.id]=rnd(m.stall_types).id;
@@ -186,7 +206,7 @@ async function runStressTest(){
       else if(payStatuses.some(function(s){return s==='paid';}))payStatus='partial';
     }
     var payMethod=Object.values(marketMethods)[0]||null;
-    vendors.push({id:uid(),user_id:currentUser.id,name:stallName,description:'We specialise in premium '+product.toLowerCase()+', handcrafted with care.',email:email,status:isApproved?'approved':'pending',markets:marketIds,market_payments:marketPayments,market_methods:marketMethods,market_stall_types:marketStallTypes,market_attendance:{},pay_status:payStatus,pay_method:payMethod,images:[],submitted_at:pastDate(rndInt(1,60)),approved_at:isApproved?pastDate(rndInt(1,30)):null,custom_responses:{}});
+    vendors.push({id:uid(),user_id:currentUser.id,name:stallName,description:'We specialise in premium '+product.toLowerCase()+', handcrafted with care.',email:email,status:isApproved?'approved':'pending',markets:marketIds,market_payments:marketPayments,market_methods:marketMethods,market_stall_types:marketStallTypes,market_attendance:{},pay_status:payStatus,pay_method:payMethod,images:[],submitted_at:pastDate(rndInt(1,120)),approved_at:isApproved?pastDate(rndInt(1,60)):null,custom_responses:{}});
   }
   var BATCH=50;
   for(var b=0;b<vendors.length;b+=BATCH){
@@ -197,11 +217,11 @@ async function runStressTest(){
   markets.forEach(function(m){state.markets.push(dbToMarket(m));});
   vendors.forEach(function(v){state.vendors.push(dbToVendor(v));});
   updateMetrics();renderHome();
-  showToast('Done! 10 markets + 200 vendors created.');
+  showToast('Done! 30 markets + 1000 vendors created.');
 }
 async function purgeStressTestData(){
   showToast('Purging stress test data...');
-  var fakeMarketNames=['Spring Craft Fair','Sunday Food Market','Artisan Weekend Market','Organic Farmers Market','Night Market','Heritage Street Market','Pop-Up Fashion Fair','Community Flea Market','Garden Market','Creative Makers Market'];
+  var fakeMarketNames=['Spring Craft Fair','Sunday Food Market','Artisan Weekend Market','Organic Farmers Market','Night Market','Heritage Street Market','Pop-Up Fashion Fair','Community Flea Market','Garden Market','Creative Makers Market','Makers & Bakers Market','Vintage & Retro Fair','Seaside Craft Market','Urban Street Food Festival','Eco & Sustainable Market','Holiday Gift Market','Weekend Wellness Market','Kids & Family Fair','Coastal Artisan Market','Township Arts Market','Tech & Innovation Fair','Harvest Festival Market','Indie Music & Craft Fair','Morning Brew Market','Sunset Night Bazaar','Handmade & Homegrown','Pet & Animal Market','Cultural Fusion Market','Mountain Makers Market','Waterfront Weekend Market'];
   var[{error:vErr},{error:mErr}]=await Promise.all([
     _sb.from('vendors').delete().eq('user_id',currentUser.id).ilike('email','%@example.com'),
     _sb.from('markets').delete().eq('user_id',currentUser.id).in('name',fakeMarketNames)
