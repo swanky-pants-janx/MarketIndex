@@ -132,7 +132,7 @@ h3{font-size:14px;font-weight:600;letter-spacing:-0.01em;margin-bottom:0.75rem;c
 .metric-value.blue{color:var(--blue)}.metric-value.green{color:var(--green)}.metric-value.amber{color:var(--amber)}.metric-value.red{color:var(--red)}
 
 /* ── BUTTONS ───────────────────────────────────────────────────── */
-.btn{padding:8px 14px;border:1px solid var(--border2);border-radius:8px;background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:all 0.15s;font-family:inherit;font-weight:400}
+.btn{padding:8px 14px;border:1px solid var(--border2);border-radius:8px;background:var(--bg);cursor:pointer;font-size:13px;color:var(--text);-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:all 0.15s;font-family:inherit;font-weight:400;box-shadow:0 2px 20px rgba(0,0,0,0.05)}
 .btn:hover{background:var(--bg3)}.btn:active{opacity:0.8}.btn:disabled{opacity:0.4;cursor:not-allowed;pointer-events:none}
 .btn.primary{background:var(--text);color:var(--bg);border-color:var(--text);font-weight:500}
 .btn.primary:hover{opacity:0.85}
@@ -292,7 +292,7 @@ select.form-input{font-size:14px}
 .bottom-nav-item:active svg{transform:scale(0.84);transition:transform 0.08s}
 
 /* Better focus rings */
-.btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(24,95,165,0.25)}
+.btn:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(90,138,40,0.25)}
 .search-input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(90,138,40,0.12)}
 
 /* Custom scrollbars */
