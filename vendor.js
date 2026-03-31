@@ -9,8 +9,8 @@ var _vpImages = []; // { url: string, file: File|null }
 var _vdDarkMode = false;
 
 function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
-function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
-function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('open');}
+function showToast(msg){var t=document.getElementById('toast');t.textContent=msg;var bar=document.createElement('div');bar.className='toast-bar';t.appendChild(bar);t.classList.add('show');setTimeout(()=>{t.classList.remove('show');},2500);}
+function closeModal(id){var el=document.getElementById(id);if(!el)return;el.classList.add('closing');setTimeout(function(){el.classList.remove('open','closing');},150);}
 function openModal(id){var el=document.getElementById(id);if(el)el.classList.add('open');}
 
 // ── SESSION ───────────────────────────────────────────────────────
