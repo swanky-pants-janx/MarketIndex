@@ -311,7 +311,7 @@ var STALL_COLORS=['#6b7280','#2563eb','#16a34a','#0d9488','#7c3aed','#ea580c','#
 var _vendorImages=[];
 
 // ── NAVIGATION ────────────────────────────────────────────────────
-function showPage(p){document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.bottom-nav-item').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');var map={home:0,approval:1,approved:2,markets:3,'form-builder':4,settings:5};if(map[p]!==undefined){var nt=document.querySelectorAll('.nav-tab')[map[p]];if(nt)nt.classList.add('active');var bn=document.querySelectorAll('.bottom-nav-item')[map[p]];if(bn)bn.classList.add('active');var si=document.querySelectorAll('.sidebar-item')[map[p]];if(si)si.classList.add('active');}if(p==='home')renderHome();if(p==='approval'){renderPending();clearNotifications();setPageDot('approval',false);loadUserData().then(()=>{renderPending();updateMetrics();});}if(p==='approved'){renderApproved();clearNotifications();setPageDot('approved',false);}if(p==='markets')renderMarkets();if(p==='form-builder')renderFormBuilder();if(p==='public')renderPublic();if(p==='settings')syncSettingsMenu();if(state.hideHints)document.querySelectorAll('.page-banner').forEach(el=>el.style.display='none');updateMetrics();window.scrollTo(0,0);}
+function showPage(p){document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.nav-tab').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.bottom-nav-item').forEach(el=>el.classList.remove('active'));document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');var map={home:0,approval:1,approved:2,markets:3,'form-builder':4,'past-vendors':5,settings:6};if(map[p]!==undefined){var nt=document.querySelectorAll('.nav-tab')[map[p]];if(nt)nt.classList.add('active');var bn=document.querySelectorAll('.bottom-nav-item')[map[p]];if(bn)bn.classList.add('active');var si=document.querySelectorAll('.sidebar-item')[map[p]];if(si)si.classList.add('active');}if(p==='home')renderHome();if(p==='approval'){renderPending();clearNotifications();setPageDot('approval',false);loadUserData().then(()=>{renderPending();updateMetrics();});}if(p==='approved'){renderApproved();clearNotifications();setPageDot('approved',false);}if(p==='markets')renderMarkets();if(p==='form-builder')renderFormBuilder();if(p==='public')renderPublic();if(p==='past-vendors')renderPastVendors();if(p==='settings')syncSettingsMenu();if(state.hideHints)document.querySelectorAll('.page-banner').forEach(el=>el.style.display='none');updateMetrics();window.scrollTo(0,0);}
 function pubTab(t){var tabs=document.querySelectorAll('.tabs-inner .tab-inner');tabs[0].classList.toggle('active',t==='browse');tabs[1].classList.toggle('active',t==='apply');document.getElementById('pub-browse').style.display=t==='browse'?'block':'none';document.getElementById('pub-apply').style.display=t==='apply'?'block':'none';if(t==='apply')renderVendorFormMarkets();}
 function updateMetrics(){var pend=state.vendors.filter(v=>v.status==='pending');var appr=state.vendors.filter(v=>v.status==='approved');var paid=appr.filter(v=>v.payStatus==='paid');var rev=appr.reduce((s,v)=>s+v.markets.reduce((t,mid)=>{var m=state.markets.find(x=>x.id===mid);return t+getStallFee(v,m);},0),0);document.getElementById('m-pending').textContent=pend.length;document.getElementById('m-app-total').textContent=appr.length;document.getElementById('m-app-paid').textContent=paid.length;document.getElementById('m-app-out').textContent=appr.length-paid.length;document.getElementById('m-app-rev').textContent='R'+rev.toLocaleString();}
 
@@ -722,6 +722,86 @@ async function confirmMassRemoveApproved(){
   renderApproved();
   updateMetrics();
   if(failed>0)showToast(failed+' delete'+(failed===1?' failed':' failed')+' — please try again.');
+}
+
+// ── PAST VENDORS ──────────────────────────────────────────────────
+function _vendorLastDate(v){var allDates=[];(v.markets||[]).forEach(function(mid){var m=state.markets.find(function(x){return x.id===mid;});if(m&&m.dates)m.dates.forEach(function(d){allDates.push(d);});});if(!allDates.length)return'—';allDates.sort();return allDates[allDates.length-1];}
+
+function renderPastVendors(filter){
+  filter=filter||'';
+  var list=state.vendors.filter(function(v){return v.status==='approved';});
+  if(filter)list=list.filter(function(v){return v.name.toLowerCase().includes(filter.toLowerCase())||v.email.toLowerCase().includes(filter.toLowerCase());});
+  list.sort(function(a,b){return a.name.toLowerCase()<b.name.toLowerCase()?-1:a.name.toLowerCase()>b.name.toLowerCase()?1:0;});
+  var tb=document.getElementById('pv-tbody'),cards=document.getElementById('pv-cards'),empty=document.getElementById('pv-empty');
+  if(!list.length){if(tb)tb.innerHTML='';if(cards)cards.innerHTML='';if(empty)empty.style.display='block';return;}
+  if(empty)empty.style.display='none';
+  if(tb){tb.innerHTML=list.map(function(v){
+    var verBadge=isVerified(v)?'<span class="badge" style="background:rgba(37,99,235,0.1);color:var(--blue);font-size:10px;margin-left:4px">&#10003; PicaMarket</span>':'';
+    var lastDate=_vendorLastDate(v);
+    var mktCount=v.markets.length;
+    return'<tr onclick="openVendorDetail(\''+v.id+'\')" style="cursor:pointer"><td><strong>'+esc(v.name)+'</strong>'+verBadge+'<br><span style="font-size:11px;color:var(--text2)">'+esc(v.email)+'</span></td><td><span class="badge" style="background:var(--blue-bg);color:var(--blue-text)">'+mktCount+' market'+(mktCount!==1?'s':'')+'</span></td><td style="color:var(--text2)">'+lastDate+'</td></tr>';
+  }).join('');}
+  if(cards){cards.innerHTML=list.map(function(v){
+    var verBadge=isVerified(v)?'<span class="badge" style="background:rgba(37,99,235,0.1);color:var(--blue);font-size:10px;margin-left:4px">&#10003; PicaMarket</span>':'';
+    var lastDate=_vendorLastDate(v);
+    return'<div class="vendor-card" onclick="openVendorDetail(\''+v.id+'\')" style="cursor:pointer"><div class="vendor-card-header"><div class="vendor-card-name">'+esc(v.name)+verBadge+'</div></div><div class="vendor-card-meta">'+v.markets.length+' market'+(v.markets.length!==1?'s':'')+' &middot; Last: '+lastDate+'</div></div>';
+  }).join('');}
+}
+
+async function openVendorDetail(vid){
+  var v=state.vendors.find(function(x){return x.id===vid;});
+  if(!v)return;
+  var profileData=null;
+  if(isVerified(v)){var{data:vp}=await _sb.from('vendor_profiles').select('stall_name,what_you_sell,images').eq('email',v.email.toLowerCase()).maybeSingle();if(vp)profileData=vp;}
+  var html='';
+  var verBadge=isVerified(v)?'<span class="badge" style="background:rgba(37,99,235,0.1);color:var(--blue);font-size:11px;margin-left:6px">&#10003; Verified PicaMarket profile</span>':'';
+  html+='<div class="card" style="margin-bottom:1.25rem">';
+  var photos=(profileData&&profileData.images&&profileData.images.length)?profileData.images:(v.images&&v.images.length?v.images:[]);
+  if(photos.length){html+='<div class="img-thumb-grid" style="margin:0 0 1rem">'+photos.slice(0,4).map(function(src){return'<div class="img-thumb"><img src="'+src+'"></div>';}).join('')+'</div>';}
+  html+='<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:4px"><h2 style="margin:0;font-size:20px">'+esc(v.name)+'</h2>'+verBadge+'</div>';
+  html+='<div style="font-size:13px;color:var(--text2);margin-bottom:8px">'+esc(v.email)+'</div>';
+  var descText=(profileData&&profileData.what_you_sell)||v.desc||'';
+  if(descText)html+='<p style="font-size:13px;color:var(--text);line-height:1.6">'+esc(descText)+'</p>';
+  if(v.approvedAt)html+='<div style="font-size:11px;color:var(--text3);margin-top:8px">First approved: '+v.approvedAt+'</div>';
+  html+='</div>';
+  html+='<div class="card" style="margin-bottom:1.25rem"><h3 style="margin-bottom:1rem">Market history</h3>';
+  if(v.markets&&v.markets.length){
+    html+='<table class="vendor-table desktop-table"><thead><tr><th>Market</th><th>Dates</th><th>Stall type</th><th>Fee</th><th>Payment</th><th>Method</th></tr></thead><tbody>';
+    html+=v.markets.map(function(mid){
+      var m=state.markets.find(function(x){return x.id===mid;});
+      var mname=m?esc(m.name):'<span style="color:var(--text3)">Unknown market</span>';
+      var dates=m&&m.dates&&m.dates.length?m.dates.join(' · '):'—';
+      var stType=m?stallTypeLabel(v,m):'—';
+      var fee=m?'R'+getStallFee(v,m):'—';
+      var mp=(v.marketPayments||{})[mid];
+      var mm=(v.marketMethods||{})[mid];
+      var pb=mp==='paid'?'<span class="badge paid">Paid</span>':'<span class="badge outstanding">Outstanding</span>';
+      var mb=mm?'<span class="badge '+mm+'">'+mm.charAt(0).toUpperCase()+mm.slice(1)+'</span>':'<span style="color:var(--text3);font-size:12px">—</span>';
+      return'<tr><td><strong>'+mname+'</strong></td><td style="color:var(--text2);font-size:12px">'+dates+'</td><td>'+stType+'</td><td>'+fee+'</td><td>'+pb+'</td><td>'+mb+'</td></tr>';
+    }).join('');
+    html+='</tbody></table>';
+    html+='<div class="mobile-cards">'+v.markets.map(function(mid){
+      var m=state.markets.find(function(x){return x.id===mid;});
+      var mname=m?esc(m.name):'Unknown market';
+      var dates=m&&m.dates&&m.dates.length?m.dates.join(', '):'—';
+      var fee=m?'R'+getStallFee(v,m):'—';
+      var mp=(v.marketPayments||{})[mid];
+      var mm=(v.marketMethods||{})[mid];
+      var pb=mp==='paid'?'<span class="badge paid">Paid</span>':'<span class="badge outstanding">Outstanding</span>';
+      return'<div class="vendor-card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><strong>'+mname+'</strong>'+pb+'</div><div style="font-size:11px;color:var(--text2);margin-bottom:2px">'+dates+'</div><div style="font-size:11px;color:var(--text2)">'+fee+(mm?' &middot; '+mm.charAt(0).toUpperCase()+mm.slice(1):'')+'</div></div>';
+    }).join('')+'</div>';
+  }else{html+='<div class="empty-state">No market history yet.</div>';}
+  html+='</div>';
+  document.getElementById('vd-content').innerHTML=html;
+  document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.bottom-nav-item').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.sidebar-item').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('page-vendor-detail').classList.add('active');
+  var nt5=document.querySelectorAll('.nav-tab')[5];if(nt5)nt5.classList.add('active');
+  var bn5=document.querySelectorAll('.bottom-nav-item')[5];if(bn5)bn5.classList.add('active');
+  var si5=document.querySelectorAll('.sidebar-item')[5];if(si5)si5.classList.add('active');
+  window.scrollTo(0,0);
 }
 
 // ── MARKET DASHBOARD ──────────────────────────────────────────────
