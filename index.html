@@ -326,6 +326,7 @@
         </div>
         <div class="settings-nav-group">
           <span class="settings-nav-label">Market</span>
+          <button class="settings-nav-item" id="snav-profile" onclick="showSettingsSec('profile')">Profile</button>
           <button class="settings-nav-item" id="snav-payment" onclick="showSettingsSec('payment')">Payment settings</button>
           <button class="settings-nav-item" id="snav-email" onclick="showSettingsSec('email')">Email templates</button>
         </div>
@@ -354,6 +355,19 @@
             <div><div class="settings-row-title">Market calendar</div><div class="settings-row-sub">Show or hide the calendar widget on the home dashboard</div></div>
             <label class="toggle-switch" onclick="toggleCalendar();event.preventDefault()"><input type="checkbox" id="sp-cal-val" tabindex="-1" checked><span class="toggle-track"></span></label>
           </div>
+        </div>
+        <div class="settings-sec" id="ssec-profile">
+          <h3 class="settings-sec-title">Profile</h3>
+          <p class="settings-sec-desc">Control how your market appears in the vendor-facing directory</p>
+          <div class="settings-row" style="margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccPublic()">
+            <div><div class="settings-row-title">Make Market Public</div><div class="settings-row-sub">Allow vendors to discover your market in the vendor-facing directory</div></div>
+            <label class="toggle-switch" onclick="event.preventDefault()"><input type="checkbox" id="acc-public-val" tabindex="-1"><span class="toggle-track"></span></label>
+          </div>
+          <div class="form-group" id="acc-desc-group">
+            <label class="form-label">Market / Business Description <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+            <textarea class="form-input" id="acc-desc" rows="3" placeholder="Briefly describe your market — vendors will see this in the directory." style="resize:vertical;min-height:72px"></textarea>
+          </div>
+          <button class="btn primary" id="profile-save-btn" onclick="saveAccountSettings()">Save</button>
         </div>
         <div class="settings-sec" id="ssec-payment">
           <h3 class="settings-sec-title">Payment settings</h3>
@@ -403,14 +417,6 @@
           <div class="settings-row" style="margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccNotify()">
             <div><div class="settings-row-title">Application email notifications</div><div class="settings-row-sub">Email me when a vendor submits a new application</div></div>
             <label class="toggle-switch" onclick="event.preventDefault()"><input type="checkbox" id="acc-notify-val" tabindex="-1" checked><span class="toggle-track"></span></label>
-          </div>
-          <div class="settings-row" style="margin-bottom:1.25rem;cursor:pointer" onclick="toggleAccPublic()">
-            <div><div class="settings-row-title">Show in Vendor Directory</div><div class="settings-row-sub">Allow vendors to discover your market in the vendor-facing directory</div></div>
-            <label class="toggle-switch" onclick="event.preventDefault()"><input type="checkbox" id="acc-public-val" tabindex="-1"><span class="toggle-track"></span></label>
-          </div>
-          <div class="form-group" id="acc-desc-group">
-            <label class="form-label">Public description <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
-            <textarea class="form-input" id="acc-desc" rows="3" placeholder="Briefly describe your market — vendors will see this in the directory." style="resize:vertical;min-height:72px" ></textarea>
           </div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem">
             <button class="btn primary" id="acc-save-btn" onclick="saveAccountSettings()">Save</button>
